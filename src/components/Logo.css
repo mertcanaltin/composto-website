@@ -1,0 +1,97 @@
+.glitch-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 96px;
+  letter-spacing: -3px;
+  color: #0f172a;
+  position: relative;
+  margin: 0;
+  line-height: 1;
+
+  @media (max-width: 1024px) {
+    font-size: 56px;
+    letter-spacing: -2px;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 40px;
+    letter-spacing: -1px;
+  }
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.glitch::before {
+  color: #2563eb;
+  animation: glitch-1 3s infinite linear alternate-reverse;
+  clip-path: inset(0 0 65% 0);
+}
+
+.glitch::after {
+  color: #dc2626;
+  animation: glitch-2 3s infinite linear alternate-reverse;
+  clip-path: inset(65% 0 0 0);
+}
+
+@keyframes glitch-1 {
+  0% { transform: translate(0); }
+  2% { transform: translate(2px, -1px); }
+  4% { transform: translate(-2px, 1px); }
+  6% { transform: translate(0); }
+  20% { transform: translate(0); }
+  22% { transform: translate(3px, 0); }
+  24% { transform: translate(-1px, -1px); }
+  26% { transform: translate(0); }
+  48% { transform: translate(0); }
+  50% { transform: translate(-3px, 2px); }
+  52% { transform: translate(2px, -1px); }
+  54% { transform: translate(0); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-2 {
+  0% { transform: translate(0); }
+  3% { transform: translate(-2px, 1px); }
+  5% { transform: translate(2px, -1px); }
+  7% { transform: translate(0); }
+  30% { transform: translate(0); }
+  32% { transform: translate(-3px, 0); }
+  34% { transform: translate(1px, 1px); }
+  36% { transform: translate(0); }
+  60% { transform: translate(0); }
+  62% { transform: translate(2px, -2px); }
+  64% { transform: translate(-2px, 1px); }
+  66% { transform: translate(0); }
+  100% { transform: translate(0); }
+}
+
+/* Scan line effect */
+.glitch-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 2px,
+    rgba(15, 23, 42, 0.02) 2px,
+    rgba(15, 23, 42, 0.02) 4px
+  );
+  pointer-events: none;
+}

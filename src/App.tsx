@@ -54,11 +54,9 @@ function App() {
     <>
       {/* Hero */}
       <section id="hero">
-        <div className="hero-logo">
-          <Logo size={170} />
-        </div>
+        <Logo />
         <span className="badge">v0.1.2 — AST-First Engine</span>
-        <h1>Send meaning to your LLM,<br />not code</h1>
+        <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
           keeps the signal, drops the noise.
