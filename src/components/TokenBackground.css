@@ -1,0 +1,127 @@
+.token-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-token {
+  position: absolute;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+/* Left to right */
+.bg-left {
+  left: -60px;
+  animation-name: slideRight;
+}
+
+/* Right to left */
+.bg-right {
+  right: -60px;
+  animation-name: slideLeft;
+}
+
+.bg-dropped {
+  color: #e2e8f0;
+  opacity: 0;
+  animation-name: dropLeft, dropRight;
+}
+
+.bg-dropped.bg-left {
+  animation-name: dropRight;
+}
+
+.bg-dropped.bg-right {
+  animation-name: dropLeft;
+}
+
+.bg-kept {
+  opacity: 0;
+}
+
+.bg-kept.bg-left {
+  animation-name: keepRight;
+}
+
+.bg-kept.bg-right {
+  animation-name: keepLeft;
+}
+
+/* Dropped: slide across, fade out halfway */
+@keyframes dropRight {
+  0% { transform: translateX(0); opacity: 0; }
+  5% { opacity: 0.25; }
+  40% { opacity: 0.15; }
+  100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
+}
+
+@keyframes dropLeft {
+  0% { transform: translateX(0); opacity: 0; }
+  5% { opacity: 0.25; }
+  40% { opacity: 0.15; }
+  100% { transform: translateX(calc(-100vw - 120px)); opacity: 0; }
+}
+
+/* Kept: slide in, pause and glow in the middle, then continue */
+@keyframes keepRight {
+  0% { transform: translateX(0); opacity: 0; }
+  5% { opacity: 0.5; }
+  35% {
+    transform: translateX(calc(45vw));
+    opacity: 1;
+    color: #da7756;
+    text-shadow: 0 0 12px rgba(218, 119, 86, 0.5);
+    font-size: 14px;
+  }
+  50% {
+    transform: translateX(calc(50vw));
+    opacity: 1;
+    color: #da7756;
+    text-shadow: 0 0 20px rgba(218, 119, 86, 0.7);
+    font-size: 14px;
+  }
+  65% {
+    transform: translateX(calc(55vw));
+    opacity: 0.8;
+    text-shadow: 0 0 8px rgba(218, 119, 86, 0.3);
+    font-size: 13px;
+  }
+  100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
+}
+
+@keyframes keepLeft {
+  0% { transform: translateX(0); opacity: 0; }
+  5% { opacity: 0.5; }
+  35% {
+    transform: translateX(calc(-45vw));
+    opacity: 1;
+    color: #da7756;
+    text-shadow: 0 0 12px rgba(218, 119, 86, 0.5);
+    font-size: 14px;
+  }
+  50% {
+    transform: translateX(calc(-50vw));
+    opacity: 1;
+    color: #da7756;
+    text-shadow: 0 0 20px rgba(218, 119, 86, 0.7);
+    font-size: 14px;
+  }
+  65% {
+    transform: translateX(calc(-55vw));
+    opacity: 0.8;
+    text-shadow: 0 0 8px rgba(218, 119, 86, 0.3);
+    font-size: 13px;
+  }
+  100% { transform: translateX(calc(-100vw - 120px)); opacity: 0; }
+}
