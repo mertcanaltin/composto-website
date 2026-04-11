@@ -27,7 +27,7 @@ export function CodeSlider({ rawCode, irCode, rawTokens, irTokens, savings }: Pr
           if (!start) start = ts
           const progress = Math.min((ts - start) / 1500, 1)
           const eased = 1 - Math.pow(1 - progress, 3) // ease-out cubic
-          setPosition(95 - eased * 90)
+          setPosition(95 - eased * 95)
           if (progress < 1) requestAnimationFrame(step)
         }
         setTimeout(() => requestAnimationFrame(step), 400)
