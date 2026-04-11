@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { CodeBlock } from './CodeBlock'
 import './CodeSlider.css'
 
@@ -11,9 +11,32 @@ interface Props {
 }
 
 export function CodeSlider({ rawCode, irCode, rawTokens, irTokens, savings }: Props) {
-  const [position, setPosition] = useState(50)
+  const [position, setPosition] = useState(95)
   const containerRef = useRef<HTMLDivElement>(null)
   const dragging = useRef(false)
+  const animated = useRef(false)
+
+  useEffect(() => {
+    if (animated.current) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !animated.current) {
+        animated.current = true
+        // Animate from 95 (raw) to 5 (IR)
+        let start: number | null = null
+        function step(ts: number) {
+          if (!start) start = ts
+          const progress = Math.min((ts - start) / 1500, 1)
+          const eased = 1 - Math.pow(1 - progress, 3) // ease-out cubic
+          setPosition(95 - eased * 90)
+          if (progress < 1) requestAnimationFrame(step)
+        }
+        setTimeout(() => requestAnimationFrame(step), 400)
+        observer.disconnect()
+      }
+    }, { threshold: 0.3 })
+    if (containerRef.current) observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   function updatePosition(clientX: number) {
     if (!containerRef.current) return
