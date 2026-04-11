@@ -69,7 +69,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.2.0 | MCP Ready</span>
+        <span className="badge">v0.2.1 | MCP Ready</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
