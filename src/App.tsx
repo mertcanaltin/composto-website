@@ -249,6 +249,55 @@ composto ir src/types.ts L0
 
       <div className="ticks"></div>
 
+      {/* Cost Savings */}
+      <section id="savings">
+        <h2>Real cost savings</h2>
+        <p style={{ textAlign: 'center', marginBottom: 24 }}>Based on actual benchmark: 52 files, 40,991 raw tokens per call.</p>
+        <div className="savings-grid">
+          <div className="savings-card">
+            <h3>Small team</h3>
+            <p className="savings-scenario">50 calls/day, 52 files</p>
+            <div className="savings-row">
+              <span>Claude Opus</span>
+              <span className="savings-amount">$824/mo saved</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Sonnet</span>
+              <span className="savings-amount">$165/mo saved</span>
+            </div>
+          </div>
+          <div className="savings-card featured">
+            <h3>Growth team</h3>
+            <p className="savings-scenario">200 calls/day, 200 files</p>
+            <div className="savings-row">
+              <span>Claude Opus</span>
+              <span className="savings-amount">$13,183/mo saved</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Sonnet</span>
+              <span className="savings-amount">$2,637/mo saved</span>
+            </div>
+          </div>
+          <div className="savings-card">
+            <h3>Enterprise</h3>
+            <p className="savings-scenario">1000 calls/day, 500+ files</p>
+            <div className="savings-row">
+              <span>Claude Opus</span>
+              <span className="savings-amount">$98,855/yr saved</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Sonnet</span>
+              <span className="savings-amount">$19,771/yr saved</span>
+            </div>
+          </div>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
+          Calculated from real benchmark data. Composto is free and open source.
+        </p>
+      </section>
+
+      <div className="ticks"></div>
+
       {/* Commands */}
       <section id="commands">
         <h2>Get started</h2>

@@ -275,6 +275,76 @@
   font-size: 15px;
 }
 
+/* Cost Savings */
+#savings {
+  border-top: 1px solid var(--border);
+  padding: 60px 32px;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    padding: 40px 20px;
+  }
+}
+
+.savings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.savings-card {
+  background: var(--bg);
+  padding: 32px 24px;
+  text-align: left;
+
+  @media (max-width: 1024px) {
+    padding: 24px 20px;
+  }
+}
+
+.savings-card.featured {
+  background: #faf7f5;
+}
+
+.savings-card h3 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+.savings-scenario {
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.savings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.savings-amount {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: #16a34a;
+  font-size: 15px;
+}
+
 /* How It Works */
 #how {
   border-top: 1px solid var(--border);
