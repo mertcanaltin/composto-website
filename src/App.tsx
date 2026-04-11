@@ -161,7 +161,7 @@ function App() {
       <section id="savings">
         <h2>Real cost savings</h2>
         <p style={{ textAlign: 'center', marginBottom: 24 }}>
-          Benchmark: 52 files, 40,991 raw tokens per call. Saving 36,613 tokens each time.
+          Benchmark: 52 files, 42,241 raw tokens per call. Saving 37,703 tokens each time.
         </p>
         <div className="savings-grid">
           <div className="savings-card">
@@ -169,15 +169,15 @@ function App() {
             <p className="savings-scenario">Same 52-file project, light usage</p>
             <div className="savings-row">
               <span>Claude Opus</span>
-              <span className="savings-amount">$165/mo</span>
+              <span className="savings-amount">$170/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Sonnet</span>
-              <span className="savings-amount">$33/mo</span>
+              <span className="savings-amount">$34/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Haiku</span>
-              <span className="savings-amount">$2.75/mo</span>
+              <span className="savings-amount">$2.83/mo</span>
             </div>
           </div>
           <div className="savings-card featured">
@@ -185,11 +185,11 @@ function App() {
             <p className="savings-scenario">Same 52-file project, active development</p>
             <div className="savings-row">
               <span>Claude Opus</span>
-              <span className="savings-amount">$824/mo</span>
+              <span className="savings-amount">$848/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Sonnet</span>
-              <span className="savings-amount">$165/mo</span>
+              <span className="savings-amount">$170/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Haiku</span>
@@ -201,15 +201,15 @@ function App() {
             <p className="savings-scenario">Same 52-file project, heavy usage</p>
             <div className="savings-row">
               <span>Claude Opus</span>
-              <span className="savings-amount">$1,648/mo</span>
+              <span className="savings-amount">$1,697/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Sonnet</span>
-              <span className="savings-amount">$330/mo</span>
+              <span className="savings-amount">$339/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Haiku</span>
-              <span className="savings-amount">$27/mo</span>
+              <span className="savings-amount">$28/mo</span>
             </div>
           </div>
         </div>
