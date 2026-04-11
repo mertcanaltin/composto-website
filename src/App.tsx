@@ -56,7 +56,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.2.0 — Now with MCP</span>
+        <span className="badge">v0.2.0 | MCP Ready</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
@@ -109,7 +109,7 @@ function App() {
         <div className="code-panel">
           <div className="panel-header">
             <h3>With Composto</h3>
-            <span className="token-badge low">249 tokens — 67% saved</span>
+            <span className="token-badge low">249 tokens, 67% saved</span>
           </div>
           <CodeBlock code={IR_CODE} language="ir" />
         </div>
@@ -175,22 +175,22 @@ composto ir src/types.ts L0
         <p>Tree-sitter parses your code into an AST. Every node gets classified.</p>
         <div className="tier-grid">
           <div className="tier-card">
-            <span className="tier-tag keep">Tier 1 — Keep</span>
+            <span className="tier-tag keep">Tier 1: Keep</span>
             <span className="tier-percent">0.8%</span>
             <p className="tier-desc">Imports, functions, classes, interfaces, types, enums</p>
           </div>
           <div className="tier-card">
-            <span className="tier-tag summarize">Tier 2 — Summarize</span>
+            <span className="tier-tag summarize">Tier 2: Summarize</span>
             <span className="tier-percent">0.9%</span>
             <p className="tier-desc">if, for, while, switch, return, throw, try/catch</p>
           </div>
           <div className="tier-card">
-            <span className="tier-tag compress">Tier 3 — Compress</span>
+            <span className="tier-tag compress">Tier 3: Compress</span>
             <span className="tier-percent">6.9%</span>
             <p className="tier-desc">Variable declarations, await expressions</p>
           </div>
           <div className="tier-card">
-            <span className="tier-tag drop">Tier 4 — Drop</span>
+            <span className="tier-tag drop">Tier 4: Drop</span>
             <span className="tier-percent">86.6%</span>
             <p className="tier-desc">String contents, operators, punctuation, comments. Noise.</p>
           </div>
@@ -261,10 +261,10 @@ composto ir src/types.ts L0
 claude mcp add composto -- npx composto-mcp
 
 # That's it. Claude now has 4 tools:
-# composto_ir        — compressed IR for any file
-# composto_benchmark — token savings report
-# composto_context   — smart context packing
-# composto_scan      — security scanner`} />
+# composto_ir         compressed IR for any file
+# composto_benchmark  token savings report
+# composto_context    smart context packing
+# composto_scan       security scanner`} />
           </div>
           <div className="install-option">
             <h3>CLI</h3>
@@ -288,7 +288,7 @@ composto context src/ --budget 2000`} />
 
       {/* Footer */}
       <section id="footer">
-        <span>Composto — less tokens, more insight</span>
+        <span>Composto | less tokens, more insight</span>
         <div className="footer-links">
           <a href="https://github.com/mertcanaltin/composto" target="_blank">GitHub</a>
           <a href="https://www.npmjs.com/package/composto-ai" target="_blank">npm</a>
