@@ -2,7 +2,7 @@ import './App.css'
 import { Logo } from './components/Logo'
 import { CodeBlock } from './components/CodeBlock'
 import { CodeSlider } from './components/CodeSlider'
-import { TokenBackground } from './components/TokenBackground'
+// TokenBackground removed
 import { LiveDemo } from './components/LiveDemo'
 
 const RAW_CODE = `import type { HealthAnnotation, DeltaContext } from "../types.js";
@@ -56,7 +56,6 @@ OUT ASYNC FN:generateLayer(layer, options)
 function App() {
   return (
     <>
-      <TokenBackground />
       {/* Hero */}
       <section id="hero">
         <Logo />
