@@ -1,4 +1,5 @@
 import './App.css'
+import { Logo } from './components/Logo'
 
 const RAW_CODE = `import type { HealthAnnotation, DeltaContext } from "../types.js";
 import { extractStructure } from "./structure.js";
@@ -53,6 +54,9 @@ function App() {
     <>
       {/* Hero */}
       <section id="hero">
+        <div className="hero-logo">
+          <Logo size={170} />
+        </div>
         <span className="badge">v0.1.2 — AST-First Engine</span>
         <h1>Send meaning to your LLM,<br />not code</h1>
         <p className="subtitle">

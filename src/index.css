@@ -66,6 +66,7 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
@@ -131,6 +132,9 @@ pre {
   overflow-x: auto;
   text-align: left;
   color: var(--text-h);
+  max-width: 100%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .ticks {
