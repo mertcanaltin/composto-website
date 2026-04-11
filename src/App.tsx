@@ -208,53 +208,49 @@ composto ir src/types.ts L0
 
       <div className="ticks"></div>
 
-      {/* Quality Proof */}
+      {/* Real World Benchmarks */}
       <section id="proof">
-        <h2 style={{ textAlign: 'center' }}>Quality proof</h2>
-        <p style={{ textAlign: 'center', marginBottom: 8 }}>Same question, raw code vs IR: "What does this file do?"</p>
+        <h2 style={{ textAlign: 'center' }}>Tested on real projects</h2>
+        <p style={{ textAlign: 'center', marginBottom: 8 }}>Not our code. Popular open source projects you know.</p>
         <div className="proof-table-wrapper">
         <table className="proof-table">
           <thead>
             <tr>
-              <th>File</th>
-              <th>Complexity</th>
-              <th>Raw</th>
+              <th>Project</th>
+              <th>Files</th>
+              <th>Raw Tokens</th>
               <th>Savings</th>
-              <th>Comprehension</th>
+              <th>AST Engine</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><code>hotspot.ts</code></td>
-              <td>Simple</td>
-              <td>299 tokens</td>
-              <td>74.2%</td>
-              <td>Full</td>
+              <td><strong>Fastify</strong></td>
+              <td>31</td>
+              <td>47,539</td>
+              <td>88.3%</td>
+              <td>28/31</td>
             </tr>
             <tr>
-              <td><code>layers.ts</code></td>
-              <td>Medium</td>
-              <td>765 tokens</td>
-              <td>67.5%</td>
-              <td>Full</td>
+              <td><strong>Undici</strong></td>
+              <td>113</td>
+              <td>233,876</td>
+              <td>91.8%</td>
+              <td>105/113</td>
             </tr>
             <tr>
-              <td><code>detector.ts</code></td>
-              <td>Medium</td>
-              <td>704 tokens</td>
-              <td>77.3%</td>
-              <td>Full</td>
-            </tr>
-            <tr>
-              <td><code>ast-walker.ts</code></td>
-              <td>Hard (448 lines)</td>
-              <td>3,782 tokens</td>
-              <td>82.5%</td>
-              <td>~90%</td>
+              <td><strong>Node.js</strong></td>
+              <td>361</td>
+              <td>946,376</td>
+              <td>88.8%</td>
+              <td>338/361</td>
             </tr>
           </tbody>
         </table>
         </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
+          Run <code>composto benchmark .</code> on your own project. Takes 2 seconds.
+        </p>
       </section>
 
       <div className="ticks"></div>
