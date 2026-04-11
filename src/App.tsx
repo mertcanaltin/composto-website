@@ -110,6 +110,116 @@ function App() {
 
       <div className="ticks"></div>
 
+      {/* Real World Benchmarks */}
+      <section id="proof">
+        <h2 style={{ textAlign: 'center' }}>Tested on real projects</h2>
+        <p style={{ textAlign: 'center', marginBottom: 8 }}>Not our code. Popular open source projects you know.</p>
+        <div className="proof-table-wrapper">
+        <table className="proof-table">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Files</th>
+              <th>Raw Tokens</th>
+              <th>Savings</th>
+              <th>AST Engine</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Fastify</strong></td>
+              <td>31</td>
+              <td>47,539</td>
+              <td>88.3%</td>
+              <td>28/31</td>
+            </tr>
+            <tr>
+              <td><strong>Undici</strong></td>
+              <td>113</td>
+              <td>233,876</td>
+              <td>91.8%</td>
+              <td>105/113</td>
+            </tr>
+            <tr>
+              <td><strong>Node.js</strong></td>
+              <td>361</td>
+              <td>946,376</td>
+              <td>88.8%</td>
+              <td>338/361</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
+          Run <code>composto benchmark .</code> on your own project. Takes 2 seconds.
+        </p>
+      </section>
+
+      <div className="ticks"></div>
+
+      {/* Cost Savings */}
+      <section id="savings">
+        <h2>Real cost savings</h2>
+        <p style={{ textAlign: 'center', marginBottom: 24 }}>
+          Benchmark: 52 files, 40,991 raw tokens per call. Saving 36,613 tokens each time.
+        </p>
+        <div className="savings-grid">
+          <div className="savings-card">
+            <h3>10 calls/day</h3>
+            <p className="savings-scenario">Same 52-file project, light usage</p>
+            <div className="savings-row">
+              <span>Claude Opus</span>
+              <span className="savings-amount">$165/mo</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Sonnet</span>
+              <span className="savings-amount">$33/mo</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Haiku</span>
+              <span className="savings-amount">$2.75/mo</span>
+            </div>
+          </div>
+          <div className="savings-card featured">
+            <h3>50 calls/day</h3>
+            <p className="savings-scenario">Same 52-file project, active development</p>
+            <div className="savings-row">
+              <span>Claude Opus</span>
+              <span className="savings-amount">$824/mo</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Sonnet</span>
+              <span className="savings-amount">$165/mo</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Haiku</span>
+              <span className="savings-amount">$14/mo</span>
+            </div>
+          </div>
+          <div className="savings-card">
+            <h3>100 calls/day</h3>
+            <p className="savings-scenario">Same 52-file project, heavy usage</p>
+            <div className="savings-row">
+              <span>Claude Opus</span>
+              <span className="savings-amount">$1,648/mo</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Sonnet</span>
+              <span className="savings-amount">$330/mo</span>
+            </div>
+            <div className="savings-row">
+              <span>Claude Haiku</span>
+              <span className="savings-amount">$27/mo</span>
+            </div>
+          </div>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
+          All numbers from real benchmark. Same project, same files. Only the call volume changes. Composto is free.
+        </p>
+      </section>
+
+      <div className="ticks"></div>
+
       {/* Before/After Slider */}
       <CodeSlider
         rawCode={RAW_CODE}
@@ -205,116 +315,6 @@ composto ir src/types.ts L0
 
       {/* Live Demo */}
       <LiveDemo />
-
-      <div className="ticks"></div>
-
-      {/* Real World Benchmarks */}
-      <section id="proof">
-        <h2 style={{ textAlign: 'center' }}>Tested on real projects</h2>
-        <p style={{ textAlign: 'center', marginBottom: 8 }}>Not our code. Popular open source projects you know.</p>
-        <div className="proof-table-wrapper">
-        <table className="proof-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Files</th>
-              <th>Raw Tokens</th>
-              <th>Savings</th>
-              <th>AST Engine</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Fastify</strong></td>
-              <td>31</td>
-              <td>47,539</td>
-              <td>88.3%</td>
-              <td>28/31</td>
-            </tr>
-            <tr>
-              <td><strong>Undici</strong></td>
-              <td>113</td>
-              <td>233,876</td>
-              <td>91.8%</td>
-              <td>105/113</td>
-            </tr>
-            <tr>
-              <td><strong>Node.js</strong></td>
-              <td>361</td>
-              <td>946,376</td>
-              <td>88.8%</td>
-              <td>338/361</td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
-          Run <code>composto benchmark .</code> on your own project. Takes 2 seconds.
-        </p>
-      </section>
-
-      <div className="ticks"></div>
-
-      {/* Cost Savings */}
-      <section id="savings">
-        <h2>Real cost savings</h2>
-        <p style={{ textAlign: 'center', marginBottom: 24 }}>
-          Benchmark: 52 files, 40,991 raw tokens → 4,378 IR tokens per call. Saving 36,613 tokens each time.
-        </p>
-        <div className="savings-grid">
-          <div className="savings-card">
-            <h3>10 calls/day</h3>
-            <p className="savings-scenario">Same 52-file project, light usage</p>
-            <div className="savings-row">
-              <span>Claude Opus</span>
-              <span className="savings-amount">$165/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Sonnet</span>
-              <span className="savings-amount">$33/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Haiku</span>
-              <span className="savings-amount">$2.75/mo</span>
-            </div>
-          </div>
-          <div className="savings-card featured">
-            <h3>50 calls/day</h3>
-            <p className="savings-scenario">Same 52-file project, active development</p>
-            <div className="savings-row">
-              <span>Claude Opus</span>
-              <span className="savings-amount">$824/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Sonnet</span>
-              <span className="savings-amount">$165/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Haiku</span>
-              <span className="savings-amount">$14/mo</span>
-            </div>
-          </div>
-          <div className="savings-card">
-            <h3>100 calls/day</h3>
-            <p className="savings-scenario">Same 52-file project, heavy usage</p>
-            <div className="savings-row">
-              <span>Claude Opus</span>
-              <span className="savings-amount">$1,648/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Sonnet</span>
-              <span className="savings-amount">$330/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Haiku</span>
-              <span className="savings-amount">$27/mo</span>
-            </div>
-          </div>
-        </div>
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
-          All numbers from real benchmark. Same project, same files. Only the call volume changes. Composto is free.
-        </p>
-      </section>
 
       <div className="ticks"></div>
 
