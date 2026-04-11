@@ -56,7 +56,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.1.2 — AST-First Engine</span>
+        <span className="badge">v0.2.0 — Now with MCP</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
@@ -253,8 +253,23 @@ composto ir src/types.ts L0
       {/* Commands */}
       <section id="commands">
         <h2>Get started</h2>
-        <p style={{ marginBottom: 24 }}>CLI tool. Works with any project.</p>
-        <CodeBlock language="bash" code={`# Install
+        <div className="install-grid">
+          <div className="install-option">
+            <h3>MCP Plugin</h3>
+            <p className="install-desc">For Claude Code, Cursor, and any MCP client. Auto-compresses code context.</p>
+            <CodeBlock language="bash" code={`# Add to Claude Code
+claude mcp add composto -- npx composto-mcp
+
+# That's it. Claude now has 4 tools:
+# composto_ir        — compressed IR for any file
+# composto_benchmark — token savings report
+# composto_context   — smart context packing
+# composto_scan      — security scanner`} />
+          </div>
+          <div className="install-option">
+            <h3>CLI</h3>
+            <p className="install-desc">Standalone command-line tool. Works with any project.</p>
+            <CodeBlock language="bash" code={`# Install globally
 npm install -g composto-ai
 
 # See how much you save
@@ -263,11 +278,10 @@ composto benchmark .
 # Generate IR for any file
 composto ir src/app.ts
 
-# Smart context within a token budget
-composto context src/ --budget 2000
-
-# Scan for security issues
-composto scan .`} />
+# Smart context within budget
+composto context src/ --budget 2000`} />
+          </div>
+        </div>
       </section>
 
       <div className="ticks"></div>
