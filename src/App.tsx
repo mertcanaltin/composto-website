@@ -1,5 +1,6 @@
 import './App.css'
 import { Logo } from './components/Logo'
+import { CodeBlock } from './components/CodeBlock'
 
 const RAW_CODE = `import type { HealthAnnotation, DeltaContext } from "../types.js";
 import { extractStructure } from "./structure.js";
@@ -103,14 +104,14 @@ function App() {
             <h3>Without Composto</h3>
             <span className="token-badge high">765 tokens</span>
           </div>
-          <pre>{RAW_CODE}</pre>
+          <CodeBlock code={RAW_CODE} language="typescript" />
         </div>
         <div className="code-panel">
           <div className="panel-header">
             <h3>With Composto</h3>
             <span className="token-badge low">249 tokens — 67% saved</span>
           </div>
-          <pre>{IR_CODE}</pre>
+          <CodeBlock code={IR_CODE} language="ir" />
         </div>
       </section>
 
@@ -200,8 +201,8 @@ function App() {
       {/* Commands */}
       <section id="commands">
         <h2>Get started</h2>
-        <p style={{ marginBottom: 24 }}>One install, instant results.</p>
-        <pre>{`# Install globally
+        <p style={{ marginBottom: 24 }}>CLI tool. Works with any project.</p>
+        <CodeBlock language="bash" code={`# Install
 npm install -g composto-ai
 
 # See how much you save
@@ -214,10 +215,7 @@ composto ir src/app.ts
 composto context src/ --budget 2000
 
 # Scan for security issues
-composto scan .
-
-# Analyze codebase health
-composto trends .`}</pre>
+composto scan .`} />
       </section>
 
       <div className="ticks"></div>

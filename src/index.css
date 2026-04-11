@@ -116,11 +116,20 @@ pre {
   margin: 0;
   overflow-x: auto;
   text-align: left;
-  color: var(--text-h);
+  color: var(--text);
   max-width: 100%;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
+
+/* Syntax highlighting */
+.hl-keyword { color: #8b5cf6; font-weight: 500; }
+.hl-string { color: #16a34a; }
+.hl-comment { color: #94a3b8; font-style: italic; }
+.hl-type { color: #0891b2; }
+.hl-fn { color: #da7756; }
+.hl-ir-tag { color: #da7756; font-weight: 600; }
+.hl-ir-arrow { color: #8b5cf6; }
 
 .ticks {
   position: relative;
