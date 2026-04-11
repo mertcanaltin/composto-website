@@ -1,0 +1,125 @@
+.slider-section {
+  border-top: 1px solid var(--border);
+  padding: 32px;
+
+  @media (max-width: 1024px) {
+    padding: 24px 20px;
+  }
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.slider-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: var(--text);
+  font-size: 15px;
+  transition: color 0.2s;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 13px;
+  }
+}
+
+.slider-label.right {
+  @media (max-width: 640px) {
+    align-items: flex-end;
+  }
+}
+
+.slider-label.active {
+  color: var(--text-h);
+}
+
+.slider-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  min-height: 360px;
+
+  @media (max-width: 1024px) {
+    min-height: 280px;
+  }
+}
+
+.slider-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slider-layer pre {
+  height: 100%;
+  border-radius: 0;
+  border: none;
+  margin: 0;
+  min-height: 360px;
+
+  @media (max-width: 1024px) {
+    min-height: 280px;
+  }
+}
+
+.raw-layer pre {
+  background: var(--code-bg);
+}
+
+.ir-layer pre {
+  background: #faf7f5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ir-layer pre {
+    background: #1a1612;
+  }
+}
+
+.slider-handle {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 10;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.slider-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: #da7756;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px rgba(218, 119, 86, 0.4);
+}
+
+.slider-grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
+  transition: transform 0.1s;
+}
+
+.slider-container:active .slider-grip {
+  transform: translate(-50%, -50%) scale(1.15);
+}

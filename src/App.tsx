@@ -1,6 +1,7 @@
 import './App.css'
 import { Logo } from './components/Logo'
 import { CodeBlock } from './components/CodeBlock'
+import { CodeSlider } from './components/CodeSlider'
 import { TokenBackground } from './components/TokenBackground'
 import { LiveDemo } from './components/LiveDemo'
 
@@ -100,23 +101,14 @@ function App() {
 
       <div className="ticks"></div>
 
-      {/* Before/After Comparison */}
-      <section id="comparison">
-        <div className="code-panel">
-          <div className="panel-header">
-            <h3>Without Composto</h3>
-            <span className="token-badge high">765 tokens</span>
-          </div>
-          <CodeBlock code={RAW_CODE} language="typescript" />
-        </div>
-        <div className="code-panel">
-          <div className="panel-header">
-            <h3>With Composto</h3>
-            <span className="token-badge low">249 tokens, 67% saved</span>
-          </div>
-          <CodeBlock code={IR_CODE} language="ir" />
-        </div>
-      </section>
+      {/* Before/After Slider */}
+      <CodeSlider
+        rawCode={RAW_CODE}
+        irCode={IR_CODE}
+        rawTokens={765}
+        irTokens={249}
+        savings="67%"
+      />
 
       <div className="ticks"></div>
 
