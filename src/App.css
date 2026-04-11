@@ -75,7 +75,7 @@
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: #0f172a;
   color: #fff;
 }
 
@@ -135,8 +135,8 @@
 }
 
 .token-badge.low {
-  background: var(--accent-bg);
-  color: var(--accent);
+  background: var(--green-bg);
+  color: var(--green);
 }
 
 /* Stats Grid */
@@ -169,7 +169,7 @@
   font-size: 48px;
   font-weight: 600;
   font-family: var(--mono);
-  color: var(--accent);
+  color: var(--text-h);
   letter-spacing: -2px;
   line-height: 1;
 
@@ -227,10 +227,10 @@
   text-transform: uppercase;
 }
 
-.tier-tag.keep { color: var(--accent); }
-.tier-tag.summarize { color: #3b82f6; }
-.tier-tag.compress { color: #f59e0b; }
-.tier-tag.drop { color: var(--red); }
+.tier-tag.keep { color: #0f172a; }
+.tier-tag.summarize { color: #2563eb; }
+.tier-tag.compress { color: #d97706; }
+.tier-tag.drop { color: #dc2626; }
 
 .tier-percent {
   font-size: 32px;
@@ -290,7 +290,7 @@
 
 .proof-table td:nth-child(4) {
   font-family: var(--mono);
-  color: var(--accent);
+  color: var(--green);
   font-weight: 600;
 }
 
