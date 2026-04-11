@@ -1,25 +1,28 @@
 .glitch-wrapper {
   position: relative;
   display: inline-block;
+  padding: 60px 0 40px;
+  overflow: hidden;
 }
 
 .glitch {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 700;
-  font-size: 96px;
-  letter-spacing: -3px;
+  font-size: 110px;
+  letter-spacing: -4px;
   color: #0f172a;
   position: relative;
   margin: 0;
   line-height: 1;
+  z-index: 2;
 
   @media (max-width: 1024px) {
-    font-size: 56px;
+    font-size: 64px;
     letter-spacing: -2px;
   }
 
   @media (max-width: 640px) {
-    font-size: 40px;
+    font-size: 42px;
     letter-spacing: -1px;
   }
 }
@@ -37,61 +40,113 @@
 
 .glitch::before {
   color: #da7756;
-  animation: glitch-1 3s infinite linear alternate-reverse;
-  clip-path: inset(0 0 65% 0);
+  text-shadow: 2px 0 #da7756;
+  animation: glitch-1 4s infinite steps(2, end);
+  clip-path: inset(0 0 60% 0);
 }
 
 .glitch::after {
-  color: #c96442;
-  animation: glitch-2 3s infinite linear alternate-reverse;
-  clip-path: inset(65% 0 0 0);
+  color: #b85a3a;
+  text-shadow: -2px 0 #b85a3a;
+  animation: glitch-2 4s infinite steps(2, end);
+  clip-path: inset(60% 0 0 0);
 }
 
 @keyframes glitch-1 {
-  0% { transform: translate(0); }
-  2% { transform: translate(2px, -1px); }
-  4% { transform: translate(-2px, 1px); }
-  6% { transform: translate(0); }
-  20% { transform: translate(0); }
-  22% { transform: translate(3px, 0); }
-  24% { transform: translate(-1px, -1px); }
-  26% { transform: translate(0); }
-  48% { transform: translate(0); }
-  50% { transform: translate(-3px, 2px); }
-  52% { transform: translate(2px, -1px); }
-  54% { transform: translate(0); }
-  100% { transform: translate(0); }
+  0%, 6%, 100% { transform: translate(0); clip-path: inset(0 0 60% 0); }
+  2% { transform: translate(4px, -2px) skewX(-2deg); clip-path: inset(10% 0 50% 0); }
+  4% { transform: translate(-3px, 1px); clip-path: inset(30% 0 40% 0); }
+  15%, 18% { transform: translate(0); clip-path: inset(0 0 60% 0); }
+  16% { transform: translate(-6px, 0) skewX(3deg); clip-path: inset(5% 0 65% 0); }
+  17% { transform: translate(5px, -1px); clip-path: inset(20% 0 45% 0); }
+  40%, 43% { transform: translate(0); clip-path: inset(0 0 60% 0); }
+  41% { transform: translate(3px, 2px) skewX(-1deg); clip-path: inset(15% 0 55% 0); }
+  42% { transform: translate(-4px, -1px); clip-path: inset(40% 0 30% 0); }
 }
 
 @keyframes glitch-2 {
-  0% { transform: translate(0); }
-  3% { transform: translate(-2px, 1px); }
-  5% { transform: translate(2px, -1px); }
-  7% { transform: translate(0); }
-  30% { transform: translate(0); }
-  32% { transform: translate(-3px, 0); }
-  34% { transform: translate(1px, 1px); }
-  36% { transform: translate(0); }
-  60% { transform: translate(0); }
-  62% { transform: translate(2px, -2px); }
-  64% { transform: translate(-2px, 1px); }
-  66% { transform: translate(0); }
-  100% { transform: translate(0); }
+  0%, 8%, 100% { transform: translate(0); clip-path: inset(60% 0 0 0); }
+  6% { transform: translate(-5px, 2px) skewX(2deg); clip-path: inset(50% 0 10% 0); }
+  7% { transform: translate(3px, -1px); clip-path: inset(70% 0 0 0); }
+  25%, 28% { transform: translate(0); clip-path: inset(60% 0 0 0); }
+  26% { transform: translate(6px, 0) skewX(-3deg); clip-path: inset(45% 0 15% 0); }
+  27% { transform: translate(-3px, 2px); clip-path: inset(55% 0 5% 0); }
+  55%, 58% { transform: translate(0); clip-path: inset(60% 0 0 0); }
+  56% { transform: translate(-7px, -1px) skewX(4deg); clip-path: inset(40% 0 20% 0); }
+  57% { transform: translate(4px, 1px); clip-path: inset(65% 0 0 0); }
 }
 
-/* Scan line effect */
-.glitch-wrapper::after {
-  content: '';
+/* Token rain */
+.token-rain {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: repeating-linear-gradient(
-    transparent,
-    transparent 2px,
-    rgba(15, 23, 42, 0.02) 2px,
-    rgba(15, 23, 42, 0.02) 4px
-  );
+  z-index: 1;
   pointer-events: none;
+}
+
+.token {
+  position: absolute;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  top: -20px;
+  animation: tokenFall linear infinite;
+  white-space: nowrap;
+}
+
+.token.dropped {
+  color: #e2e8f0;
+  animation-name: tokenDrop;
+}
+
+.token.kept {
+  color: #da7756;
+  text-shadow: 0 0 8px rgba(218, 119, 86, 0.4);
+  animation-name: tokenKeep;
+}
+
+@keyframes tokenDrop {
+  0% {
+    top: -20px;
+    opacity: 0.6;
+    transform: translateX(0);
+  }
+  60% {
+    opacity: 0.3;
+  }
+  100% {
+    top: 140%;
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+@keyframes tokenKeep {
+  0% {
+    top: -20px;
+    opacity: 0;
+    transform: translateX(0) scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    top: 45%;
+    opacity: 1;
+    transform: translateX(0) scale(1.1);
+    text-shadow: 0 0 16px rgba(218, 119, 86, 0.6);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translateX(5px) scale(1);
+  }
+  100% {
+    top: 140%;
+    opacity: 0;
+    transform: translateX(10px) scale(0.9);
+  }
 }
