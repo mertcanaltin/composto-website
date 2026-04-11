@@ -60,6 +60,7 @@
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 12px 24px;
   border-radius: 8px;
@@ -69,11 +70,18 @@
   transition: box-shadow 0.3s, transform 0.15s;
   cursor: pointer;
   border: none;
+  white-space: nowrap;
+  min-width: 0;
 
   &:hover {
     box-shadow: var(--shadow);
     transform: translateY(-1px);
     text-decoration: none;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 14px;
+    padding: 10px 16px;
   }
 }
 
@@ -86,6 +94,21 @@
   background: var(--social-bg);
   color: var(--text-h);
   border: 1px solid var(--border);
+}
+
+.btn-install {
+  padding: 8px 16px;
+}
+
+.btn-install .install-code {
+  font-size: 14px;
+  background: none;
+  padding: 0;
+  color: var(--text-h);
+
+  @media (max-width: 640px) {
+    font-size: 12px;
+  }
 }
 
 /* Comparison Section */
@@ -123,6 +146,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .token-badge {
@@ -269,11 +294,17 @@
   }
 }
 
+.proof-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .proof-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 24px;
   font-size: 15px;
+  min-width: 500px;
 }
 
 .proof-table th,
