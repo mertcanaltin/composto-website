@@ -5,53 +5,63 @@ import { CodeSlider } from './components/CodeSlider'
 // TokenBackground removed
 import { LiveDemo } from './components/LiveDemo'
 
-const RAW_CODE = `import type { HealthAnnotation, DeltaContext } from "../types.js";
-import { extractStructure } from "./structure.js";
-import { fingerprintFile } from "./fingerprint.js";
-import { annotateIR } from "./health.js";
-import { astWalkIR } from "./ast-walker.js";
+const RAW_CODE = `import Fastify from "fastify";
+import { Pool } from "pg";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
-export async function generateL1(
-  code: string,
-  filePath: string,
-  health: HealthAnnotation | null
-): Promise<string> {
-  const ir = await astWalkIR(code, filePath)
-    ?? fingerprintFile(code, 0.75);
-  if (health) {
-    return annotateIR(ir, health);
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const app = Fastify({ logger: true });
+
+app.post("/api/auth/login", async (request, reply) => {
+  const { email, password } = request.body;
+
+  if (!email || !password) {
+    return reply.code(400).send({ error: "Missing fields" });
   }
-  return ir;
-}
 
-export function generateLayer(
-  layer: IRLayer,
-  options: { code: string; filePath: string; ... }
-): Promise<string> {
-  switch (layer) {
-    case "L0":
-      return generateL0(options.code, options.filePath);
-    case "L1":
-      return generateL1(options.code, options.filePath, options.health);
-    case "L2":
-      if (!options.delta)
-        return generateL1(options.code, options.filePath, options.health);
-      return generateL2(options.delta, options.health);
-    case "L3":
-      return options.code;
+  const result = await pool.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email]
+  );
+
+  const user = result.rows[0];
+  if (!user) {
+    return reply.code(401).send({ error: "Invalid credentials" });
   }
-}`
 
-const IR_CODE = `USE:[../types.js, ./structure.js, ./fingerprint.js, ./health.js, ./ast-walker.js]
-OUT ASYNC FN:generateL1(code, filePath, health)
-    IF:health \u2192 RET annotateIR(ir, health)
-    RET ir
-OUT ASYNC FN:generateLayer(layer, options)
-    SWITCH:layer
-        CASE:"L0" \u2192 RET generateL0(...)
-        CASE:"L1" \u2192 RET generateL1(...)
-        CASE:"L2" \u2192 RET generateL2(...)
-        CASE:"L3" \u2192 RET options.code`
+  const valid = await bcrypt.compare(password, user.password_hash);
+  if (!valid) {
+    return reply.code(401).send({ error: "Invalid credentials" });
+  }
+
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "24h" }
+  );
+
+  return reply.send({ token, user: { id: user.id, email: user.email } });
+});
+
+app.listen({ port: 3000 }, (err) => {
+  if (err) throw err;
+});`
+
+const IR_CODE = `USE:fastify
+USE:pg
+USE:jsonwebtoken
+USE:bcrypt
+FN:app.post("/api/auth/login") =>
+    IF:!email || !password \u2192 RET reply.code(400)
+    AWAIT:result = pool.query("SELECT * FROM users...")
+    IF:!user \u2192 RET reply.code(401)
+    AWAIT:valid = bcrypt.compare(password, user.password_hash)
+    IF:!valid \u2192 RET reply.code(401)
+    RET reply.send({ token, user })`
 
 function App() {
   return (
@@ -104,9 +114,9 @@ function App() {
       <CodeSlider
         rawCode={RAW_CODE}
         irCode={IR_CODE}
-        rawTokens={765}
-        irTokens={249}
-        savings="67%"
+        rawTokens={304}
+        irTokens={113}
+        savings="63%"
       />
 
       <div className="ticks"></div>
