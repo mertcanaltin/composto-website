@@ -85,8 +85,8 @@ function App() {
           <div className="stat-label">Comprehension Preserved</div>
         </div>
         <div className="stat">
-          <div className="stat-value">51/51</div>
-          <div className="stat-label">Files on AST Engine</div>
+          <div className="stat-value">5</div>
+          <div className="stat-label">Languages Supported</div>
         </div>
         <div className="stat">
           <div className="stat-value">145</div>
