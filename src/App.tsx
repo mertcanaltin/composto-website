@@ -81,20 +81,20 @@ function App() {
       {/* Stats */}
       <section id="stats">
         <div className="stat">
-          <div className="stat-value">89%</div>
-          <div className="stat-label">Token Savings</div>
+          <div className="stat-value">89.3%</div>
+          <div className="stat-label">Avg Token Savings (52 files)</div>
         </div>
         <div className="stat">
-          <div className="stat-value">97%</div>
-          <div className="stat-label">Comprehension Preserved</div>
+          <div className="stat-value">10x</div>
+          <div className="stat-label">More Code Fits in Context</div>
         </div>
         <div className="stat">
-          <div className="stat-value">5</div>
-          <div className="stat-label">Languages Supported</div>
+          <div className="stat-value">99.1%</div>
+          <div className="stat-label">Best Case Compression</div>
         </div>
         <div className="stat">
-          <div className="stat-value">145</div>
-          <div className="stat-label">Tests Passing</div>
+          <div className="stat-value">60.3%</div>
+          <div className="stat-label">Worst Case (still saves)</div>
         </div>
       </section>
 
