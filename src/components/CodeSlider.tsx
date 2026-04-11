@@ -19,7 +19,7 @@ export function CodeSlider({ rawCode, irCode, rawTokens, irTokens, savings }: Pr
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
     const x = clientX - rect.left
-    const pct = Math.max(5, Math.min(95, (x / rect.width) * 100))
+    const pct = Math.max(0, Math.min(100, (x / rect.width) * 100))
     setPosition(pct)
   }
 
