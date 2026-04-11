@@ -275,6 +275,87 @@
   font-size: 15px;
 }
 
+/* Quality Proof */
+#quality {
+  border-top: 1px solid var(--border);
+  padding: 60px 32px;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    padding: 40px 20px;
+  }
+}
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 16px;
+  text-align: left;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quality-card {
+  background: var(--bg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: 1024px) {
+    padding: 24px 20px;
+  }
+}
+
+.quality-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quality-header h3 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.quality-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.quality-question {
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.quality-answer {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.quality-score {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+  margin-top: auto;
+}
+
 /* Cost Savings */
 #savings {
   border-top: 1px solid var(--border);

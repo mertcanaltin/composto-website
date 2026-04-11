@@ -220,6 +220,56 @@ function App() {
 
       <div className="ticks"></div>
 
+      {/* Quality Proof */}
+      <section id="quality">
+        <h2>Does the LLM lose understanding?</h2>
+        <p style={{ textAlign: 'center', marginBottom: 24 }}>
+          We asked real questions about real projects using only the IR. Then verified against source code.
+        </p>
+        <div className="quality-grid">
+          <div className="quality-card">
+            <div className="quality-header">
+              <h3>Fastify reply.js</h3>
+              <span className="quality-badge">1,030 lines → 73 IR</span>
+            </div>
+            <p className="quality-question">"What does this file do and what are the main functions?"</p>
+            <p className="quality-answer">
+              Identified all 20 functions, correct flow order (Reply → hooks → onSendEnd → stream/trailer → serialize),
+              correct payload dispatch logic (null → stream → web stream → buffer → error).
+            </p>
+            <span className="quality-score">Verified: 100% accurate</span>
+          </div>
+          <div className="quality-card">
+            <div className="quality-header">
+              <h3>Node.js net.js</h3>
+              <span className="quality-badge">2,569 lines → 192 IR</span>
+            </div>
+            <p className="quality-question">"What public API does this module expose?"</p>
+            <p className="quality-answer">
+              Identified createServer, connect, Socket constructor, auto-select family API, all helpers.
+              Missed: Socket inherits from Duplex (runtime call, not declaration).
+            </p>
+            <span className="quality-score">Verified: ~95% accurate</span>
+          </div>
+          <div className="quality-card">
+            <div className="quality-header">
+              <h3>Fastify onSendEnd</h3>
+              <span className="quality-badge">105-line function</span>
+            </div>
+            <p className="quality-question">"In what order does it check the payload?"</p>
+            <p className="quality-answer">
+              Reconstructed all 8 conditions in exact order: trailers → Response → null → 1xx/204 → pipe → getReader → invalid type → finalize.
+            </p>
+            <span className="quality-score">Verified: 100% accurate</span>
+          </div>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13 }}>
+          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/quality-proof.md" target="_blank">Full methodology and verification</a>
+        </p>
+      </section>
+
+      <div className="ticks"></div>
+
       {/* Before/After Slider */}
       <CodeSlider
         rawCode={RAW_CODE}
