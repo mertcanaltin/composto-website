@@ -2,6 +2,7 @@ import './App.css'
 import { Logo } from './components/Logo'
 import { CodeBlock } from './components/CodeBlock'
 import { TokenBackground } from './components/TokenBackground'
+import { LiveDemo } from './components/LiveDemo'
 
 const RAW_CODE = `import type { HealthAnnotation, DeltaContext } from "../types.js";
 import { extractStructure } from "./structure.js";
@@ -198,6 +199,11 @@ composto ir src/types.ts L0
           </div>
         </div>
       </section>
+
+      <div className="ticks"></div>
+
+      {/* Live Demo */}
+      <LiveDemo />
 
       <div className="ticks"></div>
 
