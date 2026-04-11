@@ -117,6 +117,58 @@ function App() {
 
       <div className="ticks"></div>
 
+      {/* Use Cases */}
+      <section id="use-cases">
+        <h2>How people use it</h2>
+        <p style={{ textAlign: 'center', marginBottom: 32 }}>Real workflows, real savings.</p>
+        <div className="use-case-grid">
+          <div className="use-case">
+            <span className="use-case-num">01</span>
+            <h3>"Explain this codebase"</h3>
+            <p className="use-case-desc">You have 200 files. Your LLM has a 200K token window. Raw code won't fit. With Composto:</p>
+            <CodeBlock language="bash" code={`# Pack 200 files into 4000 tokens
+composto context src/ --budget 4000
+
+# Result: 45 files at L1 (detailed)
+#         155 files at L0 (structure)
+#         Budget: 3,987/4,000 tokens`} />
+            <p className="use-case-result">Your LLM sees the entire codebase architecture in one prompt.</p>
+          </div>
+
+          <div className="use-case">
+            <span className="use-case-num">02</span>
+            <h3>"Review this PR"</h3>
+            <p className="use-case-desc">You changed 3 files but the reviewer needs context from 10 surrounding files:</p>
+            <CodeBlock language="bash" code={`# Changed files: full detail
+composto ir src/auth/login.ts L1
+
+# Context files: compressed
+composto ir src/auth/session.ts L1
+composto ir src/types.ts L0
+
+# 10 files of context in 800 tokens
+# instead of 8,000`} />
+            <p className="use-case-result">10x more context in the same token budget. Better reviews.</p>
+          </div>
+
+          <div className="use-case">
+            <span className="use-case-num">03</span>
+            <h3>"Is Composto worth it for my project?"</h3>
+            <p className="use-case-desc">Run the benchmark on your own codebase. Takes 2 seconds:</p>
+            <CodeBlock language="bash" code={`composto benchmark .
+
+# File                         Raw    L1   Saved
+# auth/login.ts                842   156   81.5%
+# utils/helpers.ts              480    72   85.0%
+# api/routes.ts               1203   198   83.5%
+# TOTAL                       2525   426   83.1%`} />
+            <p className="use-case-result">Instant proof. No API key needed. Pure local analysis.</p>
+          </div>
+        </div>
+      </section>
+
+      <div className="ticks"></div>
+
       {/* How It Works */}
       <section id="how">
         <h2>How it works</h2>
