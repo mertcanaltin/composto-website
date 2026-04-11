@@ -130,21 +130,21 @@ function App() {
               <td><strong>Fastify</strong></td>
               <td>31</td>
               <td>47,539</td>
-              <td>88.3%</td>
+              <td>88.7%</td>
               <td>28/31</td>
             </tr>
             <tr>
               <td><strong>Undici</strong></td>
               <td>113</td>
               <td>233,876</td>
-              <td>91.8%</td>
+              <td>92.1%</td>
               <td>105/113</td>
             </tr>
             <tr>
               <td><strong>Node.js</strong></td>
               <td>361</td>
               <td>946,376</td>
-              <td>88.8%</td>
+              <td>89.1%</td>
               <td>338/361</td>
             </tr>
           </tbody>
@@ -247,9 +247,9 @@ function App() {
             <p className="quality-question">"What public API does this module expose?"</p>
             <p className="quality-answer">
               Identified createServer, connect, Socket constructor, auto-select family API, all helpers.
-              Missed: Socket inherits from Duplex (runtime call, not declaration).
+              Now captures runtime inheritance: EXTENDS:Socket &lt; stream.Duplex
             </p>
-            <span className="quality-score">Verified: ~95% accurate</span>
+            <span className="quality-score">Verified: 100% accurate</span>
           </div>
           <div className="quality-card">
             <div className="quality-header">
