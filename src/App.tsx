@@ -69,7 +69,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.3.0 | JSDoc + Target</span>
+        <span className="badge">v0.3.1 | JSDoc + Target</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
@@ -91,7 +91,7 @@ function App() {
       {/* Stats */}
       <section id="stats">
         <div className="stat">
-          <div className="stat-value">89.3%</div>
+          <div className="stat-value">89.5%</div>
           <div className="stat-label">Avg Token Savings (52 files)</div>
         </div>
         <div className="stat">
@@ -130,21 +130,21 @@ function App() {
               <td><strong>Fastify</strong></td>
               <td>31</td>
               <td>47,539</td>
-              <td>88.7%</td>
+              <td>88.0%</td>
               <td>28/31</td>
             </tr>
             <tr>
               <td><strong>Undici</strong></td>
               <td>113</td>
               <td>233,876</td>
-              <td>92.1%</td>
+              <td>88.5%</td>
               <td>105/113</td>
             </tr>
             <tr>
               <td><strong>Node.js</strong></td>
               <td>361</td>
               <td>946,376</td>
-              <td>89.1%</td>
+              <td>86.5%</td>
               <td>338/361</td>
             </tr>
           </tbody>
@@ -161,7 +161,7 @@ function App() {
       <section id="savings">
         <h2>Real cost savings</h2>
         <p style={{ textAlign: 'center', marginBottom: 24 }}>
-          Benchmark: 52 files, 42,241 raw tokens per call. Saving 37,703 tokens each time.
+          Benchmark: 52 files, 46,634 raw tokens per call. Saving 41,721 tokens each time.
         </p>
         <div className="savings-grid">
           <div className="savings-card">
@@ -169,15 +169,15 @@ function App() {
             <p className="savings-scenario">Same 52-file project, light usage</p>
             <div className="savings-row">
               <span>Claude Opus</span>
-              <span className="savings-amount">$170/mo</span>
+              <span className="savings-amount">$188/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Sonnet</span>
-              <span className="savings-amount">$34/mo</span>
+              <span className="savings-amount">$38/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Haiku</span>
-              <span className="savings-amount">$2.83/mo</span>
+              <span className="savings-amount">$3.13/mo</span>
             </div>
           </div>
           <div className="savings-card featured">
@@ -185,15 +185,15 @@ function App() {
             <p className="savings-scenario">Same 52-file project, active development</p>
             <div className="savings-row">
               <span>Claude Opus</span>
-              <span className="savings-amount">$848/mo</span>
+              <span className="savings-amount">$939/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Sonnet</span>
-              <span className="savings-amount">$170/mo</span>
+              <span className="savings-amount">$188/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Haiku</span>
-              <span className="savings-amount">$14/mo</span>
+              <span className="savings-amount">$16/mo</span>
             </div>
           </div>
           <div className="savings-card">
@@ -201,15 +201,15 @@ function App() {
             <p className="savings-scenario">Same 52-file project, heavy usage</p>
             <div className="savings-row">
               <span>Claude Opus</span>
-              <span className="savings-amount">$1,697/mo</span>
+              <span className="savings-amount">$1,877/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Sonnet</span>
-              <span className="savings-amount">$339/mo</span>
+              <span className="savings-amount">$375/mo</span>
             </div>
             <div className="savings-row">
               <span>Claude Haiku</span>
-              <span className="savings-amount">$28/mo</span>
+              <span className="savings-amount">$31/mo</span>
             </div>
           </div>
         </div>
