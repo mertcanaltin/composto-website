@@ -12,22 +12,24 @@ function Docs() {
 
       <div className="docs-layout">
         <aside className="docs-sidebar">
-          <h4>Contents</h4>
-          <ul>
-            <li><a href="#what">What is Composto</a></li>
-            <li><a href="#how">How it works</a></li>
-            <li><a href="#tiers">The 4 tiers</a></li>
-            <li><a href="#layers">IR layers (L0–L3)</a></li>
-            <li><a href="#install">Installation</a></li>
-            <li><a href="#cli">CLI commands</a></li>
-            <li><a href="#mcp">MCP plugin</a></li>
-            <li><a href="#target">Target mode</a></li>
-            <li><a href="#context">Context budget</a></li>
-            <li><a href="#comments">On comments</a></li>
-            <li><a href="#quality">Quality tradeoffs</a></li>
-            <li><a href="#languages">Language support</a></li>
-            <li><a href="#faq">FAQ</a></li>
-          </ul>
+          <details className="docs-toc" open>
+            <summary>Contents</summary>
+            <ul>
+              <li><a href="#what">What is Composto</a></li>
+              <li><a href="#how">How it works</a></li>
+              <li><a href="#tiers">The 4 tiers</a></li>
+              <li><a href="#layers">IR layers (L0 to L3)</a></li>
+              <li><a href="#install">Installation</a></li>
+              <li><a href="#cli">CLI commands</a></li>
+              <li><a href="#mcp">MCP plugin</a></li>
+              <li><a href="#target">Target mode</a></li>
+              <li><a href="#context">Context budget</a></li>
+              <li><a href="#comments">On comments</a></li>
+              <li><a href="#quality">Quality tradeoffs</a></li>
+              <li><a href="#languages">Language support</a></li>
+              <li><a href="#faq">FAQ</a></li>
+            </ul>
+          </details>
         </aside>
 
         <main className="docs-content">

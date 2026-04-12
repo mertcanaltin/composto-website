@@ -55,29 +55,58 @@
   }
 }
 
-.docs-sidebar h4 {
+.docs-toc summary {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text);
   margin-bottom: 12px;
+  cursor: pointer;
+  list-style: none;
+  padding: 8px 0;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: ' ↓';
+    display: inline-block;
+    margin-left: 6px;
+    transition: transform 0.2s;
+  }
 }
 
-.docs-sidebar ul {
+.docs-toc[open] summary::after {
+  transform: rotate(180deg);
+}
+
+@media (min-width: 1025px) {
+  /* On desktop, always show contents, no toggle icon */
+  .docs-toc summary::after {
+    display: none;
+  }
+  .docs-toc summary {
+    cursor: default;
+  }
+}
+
+.docs-toc ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.docs-sidebar li {
+.docs-toc li {
   margin-bottom: 8px;
 }
 
-.docs-sidebar a {
+.docs-toc a {
   color: var(--text);
   text-decoration: none;
   display: block;
   padding: 4px 0;
+  font-size: 14px;
 
   &:hover {
     color: var(--accent);
