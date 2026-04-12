@@ -49,15 +49,23 @@ function Docs() {
           <section id="how">
             <h2>How it works</h2>
             <p>
-              When you compile a program, the compiler doesn't read the source code the way you do.
-              It parses your text into a structured tree — imports, functions, control flow, return
-              statements — and reasons over that tree. Every brace, semicolon, and indent is meaningful
-              only to the human reader.
+              Think of code like an iceberg. The visible tip, the 14%, is what your LLM
+              actually needs: function signatures, control flow, imports, class hierarchies.
+              Everything below the waterline (braces, semicolons, string contents, punctuation,
+              formatting) is syntactical scaffolding humans need to read code.
             </p>
+
+            <figure className="docs-figure">
+              <img src="/iceberg.png" alt="AST iceberg showing 14% structural meaning above the waterline and 86% syntax noise below" />
+              <figcaption>Composto sends only what's above the waterline.</figcaption>
+            </figure>
+
             <p>
-              Composto sends the structured tree directly to the LLM. The LLM reasons over structure,
-              not over visual formatting. Same understanding, fraction of the tokens.
+              When a compiler reads your code, it doesn't linger on whitespace or brace placement.
+              It parses the text into a structured tree and reasons over that tree. Composto
+              does the same, then sends the tree directly to the LLM.
             </p>
+
             <CodeBlock language="bash" code={`Your code
     │
     ▼  tree-sitter parse
@@ -125,7 +133,7 @@ Your LLM`} />
               the right layer for the task.
             </p>
 
-            <h3>L0 — Structure map</h3>
+            <h3>L0, Structure map</h3>
             <p>Just names and line numbers. Use when you need navigation, not behavior.</p>
             <CodeBlock language="ir" code={`src/auth/session.ts
   FN:createSession L5
@@ -133,7 +141,7 @@ Your LLM`} />
   CLASS:SessionManager L45`} />
             <p><em>Typical savings: 95–98%</em></p>
 
-            <h3>L1 — Full IR</h3>
+            <h3>L1, Full IR</h3>
             <p>Signatures, control flow, imports. The default for comprehension tasks.</p>
             <CodeBlock language="ir" code={`USE:jsonwebtoken
 OUT ASYNC FN:validateToken(token: string)
@@ -145,7 +153,7 @@ OUT ASYNC FN:validateToken(token: string)
     RET false`} />
             <p><em>Typical savings: 80–92%</em></p>
 
-            <h3>L2 — Delta context</h3>
+            <h3>L2, Delta context</h3>
             <p>For code reviews. Only shows changed lines + surrounding context.</p>
             <CodeBlock language="ir" code={`FILE: src/auth/session.ts
 SCOPE: validateToken
@@ -154,7 +162,7 @@ CHANGED:
 CONTEXT: TRY ... CATCH ...
 BLAME: mecaltin, 2026-04-10, "fix: token expiry check"`} />
 
-            <h3>L3 — Raw source</h3>
+            <h3>L3, Raw source</h3>
             <p>The original code, unchanged. Use for bug fixes and precise edits.</p>
           </section>
 
@@ -215,10 +223,10 @@ composto context <path> --target validateToken --budget 4000`} />
               can call autonomously:
             </p>
             <ul>
-              <li><code>composto_ir</code> — generate IR for a file</li>
-              <li><code>composto_benchmark</code> — token savings report</li>
-              <li><code>composto_context</code> — pack files within a budget (supports target)</li>
-              <li><code>composto_scan</code> — find security issues</li>
+              <li><code>composto_ir</code>, generate IR for a file</li>
+              <li><code>composto_benchmark</code>, token savings report</li>
+              <li><code>composto_context</code>, pack files within a budget (supports target)</li>
+              <li><code>composto_scan</code>, find security issues</li>
             </ul>
             <p>
               Your AI assistant will automatically pick these tools when asked about code.
@@ -229,7 +237,7 @@ composto context <path> --target validateToken --budget 4000`} />
           <section id="target">
             <h2>Target mode</h2>
             <p>
-              For implementation tasks — fixing bugs, editing functions, tracing wrong values —
+              For implementation tasks like fixing bugs, editing functions, or tracing wrong values,
               use the <code>--target</code> flag.
             </p>
             <CodeBlock language="bash" code={`composto context . --target validateToken --budget 4000`} />
@@ -276,7 +284,7 @@ composto context <path> --target validateToken --budget 4000`} />
             <CodeBlock language="ir" code={`@deprecated "Validates JWT token" OUT FN:validateToken(token)`} />
 
             <h3>Python docstrings</h3>
-            <p>Kept. First line only, 30-char max. Same principle — structural signal.</p>
+            <p>Kept. First line only, 30-char max. Same principle, structural signal.</p>
 
             <h3>Regular comments (<code>//</code> and <code>/* */</code>)</h3>
             <p>
