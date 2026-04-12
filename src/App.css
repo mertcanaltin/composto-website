@@ -212,6 +212,62 @@
   color: var(--text);
 }
 
+/* Target Feature */
+#target {
+  border-top: 1px solid var(--border);
+  padding: 60px 32px;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    padding: 40px 20px;
+  }
+}
+
+.target-demo {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: left;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.target-panel {
+  background: var(--bg);
+  padding: 28px 24px;
+
+  @media (max-width: 1024px) {
+    padding: 24px 20px;
+  }
+}
+
+.target-panel h3 {
+  font-size: 14px;
+  margin: 0 0 12px;
+  color: var(--text);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.target-quote {
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--text-h);
+  font-style: italic;
+  margin: 0;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
 /* Use Cases */
 #use-cases {
   border-top: 1px solid var(--border);

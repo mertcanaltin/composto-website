@@ -69,7 +69,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.2.1 | MCP Ready</span>
+        <span className="badge">v0.2.3 | Target Mode</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
@@ -278,6 +278,38 @@ function App() {
         irTokens={113}
         savings="63%"
       />
+
+      <div className="ticks"></div>
+
+      {/* Target Feature */}
+      <section id="target">
+        <h2>"But what about fixing bugs?"</h2>
+        <p style={{ textAlign: 'center', marginBottom: 24, maxWidth: 640, margin: '0 auto 24px' }}>
+          Fair question. IR is for understanding, not implementation. For bug fixes you need exact code.
+          That's what <code>--target</code> is for.
+        </p>
+        <div className="target-demo">
+          <div className="target-panel">
+            <h3>You ask:</h3>
+            <p className="target-quote">"Fix the bug in validateToken. It's returning false for valid tokens."</p>
+          </div>
+          <div className="target-panel">
+            <h3>Composto sends:</h3>
+            <CodeBlock language="bash" code={`composto context . --target validateToken
+
+# Target file (contains validateToken): RAW CODE
+# Files that import/export it: L1 (compressed)
+# Hotspot files: L1 (compressed)
+# Everything else: L0 (structure only)
+
+# Result: your LLM sees the exact function code
+# PLUS surrounding context, all within budget`} />
+          </div>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 14 }}>
+          Target file at L3, 10x more surrounding context at L1/L0. Same token budget.
+        </p>
+      </section>
 
       <div className="ticks"></div>
 
