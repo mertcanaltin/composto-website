@@ -1,8 +1,20 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CodeBlock } from './components/CodeBlock'
 import './Docs.css'
 
 function Docs() {
+  const [tocOpen, setTocOpen] = useState(false)
+
+  useEffect(() => {
+    // Open by default on desktop, closed on mobile
+    const mq = window.matchMedia('(min-width: 1025px)')
+    setTocOpen(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setTocOpen(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
   return (
     <>
       <nav className="docs-nav">
@@ -12,7 +24,7 @@ function Docs() {
 
       <div className="docs-layout">
         <aside className="docs-sidebar">
-          <details className="docs-toc" open>
+          <details className="docs-toc" open={tocOpen}>
             <summary>Contents</summary>
             <ul>
               <li><a href="#what">What is Composto</a></li>
