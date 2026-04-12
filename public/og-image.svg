@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="628" viewBox="0 0 1200 628">
+  <rect width="1200" height="628" fill="#ffffff"/>
+  <rect x="48" y="48" width="1104" height="532" fill="none" stroke="#e0dbd4" stroke-width="1"/>
+  <text x="120" y="224" fill="#d97757" font-family="'IBM Plex Mono', monospace" font-size="52" font-weight="700" letter-spacing="8">COMPOSTO</text>
+  <line x1="120" y1="248" x2="380" y2="248" stroke="#d97757" stroke-width="2"/>
+  <text x="120" y="316" fill="#d97757" font-family="'IBM Plex Mono', monospace" font-size="32" font-weight="400">Send meaning to your LLM,</text>
+  <text x="120" y="360" fill="#d97757" font-family="'IBM Plex Mono', monospace" font-size="32" font-weight="400">not code.</text>
+  <text x="120" y="432" fill="#e8a882" font-family="'IBM Plex Mono', monospace" font-size="20" font-weight="400">89% fewer tokens</text>
+  <circle cx="400" cy="425" r="3" fill="#e8a882"/>
+  <text x="420" y="432" fill="#e8a882" font-family="'IBM Plex Mono', monospace" font-size="20" font-weight="400">Same answer</text>
+  <text x="1080" y="536" fill="#e8a882" font-family="'IBM Plex Mono', monospace" font-size="18" font-weight="400" text-anchor="end">composto.io</text>
+</svg>
