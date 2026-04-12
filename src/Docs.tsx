@@ -56,7 +56,7 @@ function Docs() {
             </p>
 
             <figure className="docs-figure">
-              <img src="/iceberg.png" alt="AST iceberg showing 14% structural meaning above the waterline and 86% syntax noise below" />
+              <img src="/iceberg.svg" alt="AST iceberg showing 14% structural meaning above the waterline and 86% syntax noise below" />
               <figcaption>Composto sends only what's above the waterline.</figcaption>
             </figure>
 
@@ -66,24 +66,19 @@ function Docs() {
               does the same, then sends the tree directly to the LLM.
             </p>
 
-            <CodeBlock language="bash" code={`Your code
-    │
-    ▼  tree-sitter parse
-[AST: ~8,000 nodes]
-    │
-    ▼  classify by tier
-[Tier 1-4 sorted]
-    │
-    ▼  emit IR, drop Tier 4 (86% of nodes)
-[Compressed IR]
-    │
-    ▼
-Your LLM`} />
+            <figure className="docs-figure">
+              <img src="/pipeline.svg" alt="Composto pipeline: code parsed into AST, classified by tier, compressed into IR, sent to LLM" />
+              <figcaption>The Composto pipeline.</figcaption>
+            </figure>
           </section>
 
           <section id="tiers">
             <h2>The 4 tiers</h2>
             <p>Every AST node gets classified into one of four tiers:</p>
+            <figure className="docs-figure">
+              <img src="/tier-breakdown.svg" alt="Visual breakdown of tier distribution: Tier 4 takes 86.6% of all AST nodes" />
+              <figcaption>Most of your code is Tier 4.</figcaption>
+            </figure>
             <table className="docs-table">
               <thead>
                 <tr>
@@ -127,11 +122,16 @@ Your LLM`} />
           </section>
 
           <section id="layers">
-            <h2>IR layers (L0–L3)</h2>
+            <h2>IR layers (L0 to L3)</h2>
             <p>
               Composto produces different representations at different levels of detail. You pick
               the right layer for the task.
             </p>
+
+            <figure className="docs-figure">
+              <img src="/layer-comparison.svg" alt="Side by side comparison of L0, L1, L2, L3 representations" />
+              <figcaption>Same function, four layers, different token budgets.</figcaption>
+            </figure>
 
             <h3>L0, Structure map</h3>
             <p>Just names and line numbers. Use when you need navigation, not behavior.</p>
@@ -241,6 +241,12 @@ composto context <path> --target validateToken --budget 4000`} />
               use the <code>--target</code> flag.
             </p>
             <CodeBlock language="bash" code={`composto context . --target validateToken --budget 4000`} />
+
+            <figure className="docs-figure">
+              <img src="/target-mode.svg" alt="Target mode: target file at L3, related files at L1, rest at L0" />
+              <figcaption>Target file gets full detail, context gets compressed.</figcaption>
+            </figure>
+
             <p>How the layer assignment works:</p>
             <ul>
               <li>File containing <code>validateToken</code> → <strong>L3 (raw code)</strong></li>
@@ -327,6 +333,11 @@ composto context <path> --target validateToken --budget 4000`} />
               <li>Comments (<code>//</code>, <code>/* */</code>) outside JSDoc</li>
               <li>Whitespace and formatting</li>
             </ul>
+
+            <figure className="docs-figure">
+              <img src="/cost-savings.svg" alt="Monthly cost comparison: without Composto vs with Composto at 50 calls per day" />
+              <figcaption>Cost impact at 50 calls per day on Claude Opus.</figcaption>
+            </figure>
 
             <h3>When to use what</h3>
             <table className="docs-table">
