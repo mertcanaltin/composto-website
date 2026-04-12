@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './App.css'
 import { Logo } from './components/Logo'
 import { CodeBlock } from './components/CodeBlock'
@@ -83,6 +84,9 @@ function App() {
           <a href="#commands" className="btn btn-secondary btn-install">
             <code className="install-code">npm i -g composto-ai</code>
           </a>
+          <Link to="/docs" className="btn btn-secondary">
+            Docs
+          </Link>
         </div>
       </section>
 
@@ -440,6 +444,7 @@ composto context src/ --budget 2000`} />
       <section id="footer">
         <span>Composto | less tokens, more insight</span>
         <div className="footer-links">
+          <Link to="/docs">Docs</Link>
           <a href="https://github.com/mertcanaltin/composto" target="_blank">GitHub</a>
           <a href="https://www.npmjs.com/package/composto-ai" target="_blank">npm</a>
           <a href="https://github.com/mertcanaltin/composto/blob/master/docs/benchmark-proof.md" target="_blank">Benchmark</a>
