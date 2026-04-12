@@ -134,10 +134,38 @@
 .docs-content section {
   padding-top: 48px;
   margin-bottom: 24px;
+  scroll-margin-top: 24px;
 
   &:first-child {
     padding-top: 0;
   }
+}
+
+.quick-start {
+  background: #faf7f5;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px !important;
+  margin-bottom: 24px;
+
+  @media (max-width: 1024px) {
+    padding: 24px 20px !important;
+  }
+}
+
+.quick-start h1 {
+  font-size: 32px !important;
+  margin-bottom: 8px !important;
+}
+
+.quick-start h3 {
+  margin-top: 20px !important;
+}
+
+.quick-note {
+  margin-top: 16px !important;
+  font-size: 13px;
+  color: var(--text);
 }
 
 .docs-content h1 {

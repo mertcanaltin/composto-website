@@ -27,6 +27,7 @@ function Docs() {
           <details className="docs-toc" open={tocOpen}>
             <summary>Contents</summary>
             <ul>
+              <li><a href="#quick-start">Quick start</a></li>
               <li><a href="#what">What is Composto</a></li>
               <li><a href="#how">How it works</a></li>
               <li><a href="#tiers">The 4 tiers</a></li>
@@ -45,6 +46,22 @@ function Docs() {
         </aside>
 
         <main className="docs-content">
+
+          <section id="quick-start" className="quick-start">
+            <h1>Quick start</h1>
+            <p>Two ways to get Composto running.</p>
+
+            <h3>CLI</h3>
+            <CodeBlock language="bash" code={`npm install -g composto-ai
+composto benchmark .`} />
+
+            <h3>MCP plugin (Claude Code, Cursor)</h3>
+            <CodeBlock language="bash" code={`claude mcp add composto -- npx composto-mcp`} />
+
+            <p className="quick-note">
+              That's it. No API key needed for the basics. Full command reference below.
+            </p>
+          </section>
 
           <section id="what">
             <h1>What is Composto</h1>
