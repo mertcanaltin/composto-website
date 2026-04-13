@@ -56,7 +56,8 @@ function Docs() {
 composto benchmark .`} />
 
             <h3>MCP plugin (Claude Code, Cursor)</h3>
-            <CodeBlock language="bash" code={`claude mcp add composto -- npx composto-mcp`} />
+            <CodeBlock language="bash" code={`npm install -g composto-ai
+claude mcp add composto -- composto-mcp`} />
 
             <p className="quick-note">
               That's it. No API key needed for the basics. Full command reference below.
@@ -205,14 +206,15 @@ BLAME: mecaltin, 2026-04-10, "fix: token expiry check"`} />
 composto benchmark .`} />
 
             <h3>MCP plugin (Claude Code, Cursor, Claude Desktop)</h3>
-            <CodeBlock language="bash" code={`claude mcp add composto -- npx composto-mcp`} />
+            <p>The MCP server is bundled inside <code>composto-ai</code>. Install the package globally first, then register the server:</p>
+            <CodeBlock language="bash" code={`npm install -g composto-ai
+claude mcp add composto -- composto-mcp`} />
 
             <p>Claude Desktop config (<code>~/Library/Application Support/Claude/claude_desktop_config.json</code>):</p>
             <CodeBlock language="bash" code={`{
   "mcpServers": {
     "composto": {
-      "command": "npx",
-      "args": ["composto-mcp"]
+      "command": "composto-mcp"
     }
   }
 }`} />

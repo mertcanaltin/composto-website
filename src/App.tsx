@@ -411,10 +411,11 @@ composto ir src/types.ts L0
           <div className="install-option">
             <h3>MCP Plugin</h3>
             <p className="install-desc">For Claude Code, Cursor, and any MCP client. Auto-compresses code context.</p>
-            <CodeBlock language="bash" code={`# Add to Claude Code
-claude mcp add composto -- npx composto-mcp
+            <CodeBlock language="bash" code={`# Install + register
+npm install -g composto-ai
+claude mcp add composto -- composto-mcp
 
-# That's it. Claude now has 4 tools:
+# Claude now has 4 tools:
 # composto_ir         compressed IR for any file
 # composto_benchmark  token savings report
 # composto_context    smart context packing
