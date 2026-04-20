@@ -222,6 +222,24 @@ composto benchmark .`} />
   }
 }`} />
 
+            <p>
+              Registering the server only <em>exposes</em> the tools — Cursor's agent will still
+              default to its built-in <code>read_file</code> / <code>codebase_search</code> most of
+              the time. The fix is a project rule at <code>.cursor/rules/composto.mdc</code>. Skip
+              the manual setup and run:
+            </p>
+            <CodeBlock language="bash" code={`cd your-project
+composto init`} />
+            <p>
+              That writes <code>.cursor/mcp.json</code> and <code>.cursor/rules/composto.mdc</code> in
+              one shot. Existing files are merged, never overwritten. The rule uses{" "}
+              <code>alwaysApply: true</code>, so it's injected into every conversation's system
+              prompt — the agent learns to call <code>composto_blastradius</code> before edits,{" "}
+              <code>composto_context</code> for bug-fix tasks, and <code>composto_ir</code> instead
+              of <code>read_file</code> for "what does this do" questions. Without the rule, hit
+              rate is ~30-50%; with it, ~85-95%.
+            </p>
+
             <p><strong>Claude Desktop</strong> — same block in <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
             <CodeBlock language="bash" code={`{
   "mcpServers": {
