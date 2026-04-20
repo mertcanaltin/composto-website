@@ -207,11 +207,22 @@ BLAME: mecaltin, 2026-04-10, "fix: token expiry check"`} />
 composto benchmark .`} />
 
             <h3>MCP plugin (Claude Code, Cursor, Claude Desktop)</h3>
-            <p>The MCP server is bundled inside <code>composto-ai</code>. Install the package globally first, then register the server:</p>
-            <CodeBlock language="bash" code={`npm install -g composto-ai
-claude mcp add composto -- composto-mcp`} />
+            <p>The MCP server is bundled inside <code>composto-ai</code>. Install the package globally, then register it with your client:</p>
+            <CodeBlock language="bash" code={`npm install -g composto-ai`} />
 
-            <p>Claude Desktop config (<code>~/Library/Application Support/Claude/claude_desktop_config.json</code>):</p>
+            <p><strong>Claude Code</strong></p>
+            <CodeBlock language="bash" code={`claude mcp add composto -- composto-mcp`} />
+
+            <p><strong>Cursor</strong> — add to <code>~/.cursor/mcp.json</code> (or project-local <code>.cursor/mcp.json</code>), then restart Cursor and check Settings → MCP:</p>
+            <CodeBlock language="bash" code={`{
+  "mcpServers": {
+    "composto": {
+      "command": "composto-mcp"
+    }
+  }
+}`} />
+
+            <p><strong>Claude Desktop</strong> — same block in <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
             <CodeBlock language="bash" code={`{
   "mcpServers": {
     "composto": {
