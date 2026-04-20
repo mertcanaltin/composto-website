@@ -70,7 +70,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.3.1 | BlastRadius (beta)</span>
+        <span className="badge">v0.4.1 | BlastRadius (beta)</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
@@ -353,18 +353,127 @@ signals:
 # blastradius remembers. Your LLM couldn't.`} />
           </div>
         </div>
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
-          v1 ship-gate on composto's own repo:{' '}
-          <strong>precision 93.9%, recall 100%</strong> on the medium|high verdict band.{' '}
+        <div className="proof-table-wrapper" style={{ marginTop: 24 }}>
+          <table className="proof-table">
+            <thead>
+              <tr>
+                <th>Repo</th>
+                <th>Commits</th>
+                <th>Source files</th>
+                <th>Medium+ verdicts</th>
+                <th>Precision</th>
+                <th>Recall<sup>*</sup></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>composto</strong></td>
+                <td>~100</td>
+                <td>128</td>
+                <td>49</td>
+                <td>93.9%</td>
+                <td>100%</td>
+              </tr>
+              <tr>
+                <td><strong>picomatch</strong></td>
+                <td>~280</td>
+                <td>62</td>
+                <td>62</td>
+                <td>90.3%</td>
+                <td>100%</td>
+              </tr>
+              <tr>
+                <td><strong>zod</strong></td>
+                <td>~2,800</td>
+                <td>394</td>
+                <td>376</td>
+                <td>96.0%</td>
+                <td>99.2%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 12, fontSize: 13, color: 'var(--text)' }}>
+          Ship gate: <strong>precision &gt; 60%, recall &gt; 40%</strong> on the <code>medium|high</code> verdict band.
+          All three repos pass.{' '}
           <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof.md" target="_blank" rel="noreferrer">
             Read the numbers →
           </a>
           <br />
           <small>
-            Feature-flagged via <code>COMPOSTO_BLASTRADIUS=1</code> while multi-repo validation is underway.
-            Five signals (revert_match, hotspot, fix_ratio, coverage_decline, author_churn); verdict returns{' '}
-            <code>"unknown"</code> when confidence is low instead of guessing.
+            <sup>*</sup>Recall is scoped to files still present in the working tree. Small repos (picomatch: 62 files) tend to
+            flag most files as medium+ because fix history is dense relative to file count; precision remains a real signal,
+            recall less so. zod (394 files, ~2.8k commits) has enough spread for both to be meaningful.<br />
+            Feature-flagged via <code>COMPOSTO_BLASTRADIUS=1</code>. Five signals with repo-calibrated precision; verdict returns{' '}
+            <code>"unknown"</code> when confidence is low instead of guessing. Plan 5b will re-run these under time-travel
+            queries for stricter attribution.
           </small>
+        </p>
+
+        <div className="br-getstarted">
+          <h3 style={{ textAlign: 'center', marginTop: 40, marginBottom: 20 }}>Try it in 60 seconds</h3>
+          <div className="br-steps">
+            <div className="br-step">
+              <span className="br-step-num">1</span>
+              <div>
+                <h4>Install</h4>
+                <CodeBlock language="bash" code={`npm install -g composto-ai`} />
+              </div>
+            </div>
+            <div className="br-step">
+              <span className="br-step-num">2</span>
+              <div>
+                <h4>Index your repo once</h4>
+                <CodeBlock language="bash" code={`cd your-project
+export COMPOSTO_BLASTRADIUS=1
+composto index      # ~30ms for a 20-commit repo, scales linearly`} />
+              </div>
+            </div>
+            <div className="br-step">
+              <span className="br-step-num">3</span>
+              <div>
+                <h4>Ask about any file</h4>
+                <CodeBlock language="bash" code={`composto impact src/auth/login.ts
+
+# Or before any substantial edit, let your agent call
+# composto_blastradius through the MCP plugin.`} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="br-workflows">
+          <h3 style={{ textAlign: 'center', marginTop: 40, marginBottom: 12 }}>Where it fits</h3>
+          <div className="br-workflow-grid">
+            <div className="br-workflow">
+              <span className="br-workflow-tag">Inside Claude Code / Cursor</span>
+              <p>
+                Register the MCP plugin. Your agent calls <code>composto_blastradius</code> before
+                proposing significant edits. High-risk files surface a warning before the diff.
+              </p>
+            </div>
+            <div className="br-workflow">
+              <span className="br-workflow-tag">On your machine</span>
+              <p>
+                Run <code>composto impact</code> when you're about to touch a file you don't know well.
+                The verdict plus the evidence list (commit SHAs that broke things) points you at the
+                past incidents you'd miss by reading the current code.
+              </p>
+            </div>
+            <div className="br-workflow">
+              <span className="br-workflow-tag">In CI / pre-merge</span>
+              <p>
+                Pipe <code>git diff --name-only origin/main</code> into <code>composto impact</code>.
+                Flag PRs that touch medium|high-verdict files so a human gets a second look before
+                merging.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p style={{ textAlign: 'center', marginTop: 32, fontSize: 13, color: 'var(--text)' }}>
+          <strong>When NOT to use it:</strong> fresh repos with less than ~50 commits — confidence stays low on purpose.
+          The tool honestly returns <code>unknown</code> rather than guess. Value grows with the repo's history.
         </p>
       </section>
 
