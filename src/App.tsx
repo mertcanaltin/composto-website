@@ -70,7 +70,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.3.1 | JSDoc + Target</span>
+        <span className="badge">v0.3.1 | BlastRadius (beta)</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
@@ -317,6 +317,59 @@ function App() {
 
       <div className="ticks"></div>
 
+      {/* BlastRadius — causal oracle */}
+      <section id="blastradius">
+        <span className="badge" style={{ marginBottom: 16 }}>New · beta</span>
+        <h2>composto_blastradius</h2>
+        <p style={{ textAlign: 'center', marginBottom: 8, maxWidth: 720, margin: '0 auto 8px' }}>
+          IR tells your LLM <em>what your code means</em>.{' '}
+          <strong>BlastRadius tells it what your code has historically broken.</strong>
+        </p>
+        <p style={{ textAlign: 'center', marginBottom: 24, maxWidth: 720, margin: '0 auto 24px', fontSize: 14, color: 'var(--text)' }}>
+          Before your agent edits a file it can ask: has this region been reverted? is there a fix cluster?
+          is the last author still around? Signals your LLM can't infer from current code — the data lives
+          in the delta between past states of the repo.
+        </p>
+        <div className="target-demo">
+          <div className="target-panel">
+            <h3>You ask:</h3>
+            <CodeBlock language="bash" code={`composto index                           # bootstrap the memory graph
+composto impact scripts/demo-video.ts   # query blast radius`} />
+          </div>
+          <div className="target-panel">
+            <h3>Composto answers:</h3>
+            <CodeBlock language="bash" code={`verdict:    high
+score:      1.00
+confidence: 0.30
+tazelik:    fresh
+signals:
+  revert_match       ■■■■■■■■■■ strength=1.00 precision=0.50
+  hotspot            ·          strength=0.00 precision=0.30
+  fix_ratio          ·          strength=0.00 precision=0.30
+  coverage_decline   ·          strength=0.00 precision=0.30
+  author_churn       ·          strength=0.00 precision=0.30
+
+# This file was touched by a Revert commit in history.
+# blastradius remembers. Your LLM couldn't.`} />
+          </div>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
+          v1 ship-gate on composto's own repo:{' '}
+          <strong>precision 93.9%, recall 100%</strong> on the medium|high verdict band.{' '}
+          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof.md" target="_blank" rel="noreferrer">
+            Read the numbers →
+          </a>
+          <br />
+          <small>
+            Feature-flagged via <code>COMPOSTO_BLASTRADIUS=1</code> while multi-repo validation is underway.
+            Five signals (revert_match, hotspot, fix_ratio, coverage_decline, author_churn); verdict returns{' '}
+            <code>"unknown"</code> when confidence is low instead of guessing.
+          </small>
+        </p>
+      </section>
+
+      <div className="ticks"></div>
+
       {/* Use Cases */}
       <section id="use-cases">
         <h2>How people use it</h2>
@@ -415,11 +468,12 @@ composto ir src/types.ts L0
 npm install -g composto-ai
 claude mcp add composto -- composto-mcp
 
-# Claude now has 4 tools:
-# composto_ir         compressed IR for any file
-# composto_benchmark  token savings report
-# composto_context    smart context packing
-# composto_scan       security scanner`} />
+# Claude now has 5 tools:
+# composto_ir           compressed IR for any file
+# composto_benchmark    token savings report
+# composto_context      smart context packing
+# composto_scan         security scanner
+# composto_blastradius  historical blast radius (beta)`} />
           </div>
           <div className="install-option">
             <h3>CLI</h3>
@@ -434,7 +488,11 @@ composto benchmark .
 composto ir src/app.ts
 
 # Smart context within budget
-composto context src/ --budget 2000`} />
+composto context src/ --budget 2000
+
+# Historical blast radius (beta)
+COMPOSTO_BLASTRADIUS=1 composto index
+composto impact src/auth/login.ts`} />
           </div>
         </div>
       </section>
@@ -449,6 +507,7 @@ composto context src/ --budget 2000`} />
           <a href="https://github.com/mertcanaltin/composto" target="_blank">GitHub</a>
           <a href="https://www.npmjs.com/package/composto-ai" target="_blank">npm</a>
           <a href="https://github.com/mertcanaltin/composto/blob/master/docs/benchmark-proof.md" target="_blank">Benchmark</a>
+          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof.md" target="_blank">BlastRadius proof</a>
         </div>
       </section>
     </>

@@ -36,6 +36,7 @@ function Docs() {
               <li><a href="#cli">CLI commands</a></li>
               <li><a href="#mcp">MCP plugin</a></li>
               <li><a href="#target">Target mode</a></li>
+              <li><a href="#blastradius">BlastRadius (beta)</a></li>
               <li><a href="#context">Context budget</a></li>
               <li><a href="#comments">On comments</a></li>
               <li><a href="#quality">Quality tradeoffs</a></li>
@@ -291,6 +292,79 @@ composto context <path> --target validateToken --budget 4000`} />
               You get the exact code for the function you're working on, plus compressed context
               for everything around it. The LLM can fix implementation details while still
               understanding the architecture.
+            </p>
+          </section>
+
+          <section id="blastradius">
+            <h2>BlastRadius <span className="badge" style={{ fontSize: 12, marginLeft: 8 }}>beta</span></h2>
+            <p>
+              Compression tells your LLM what the code <em>means</em>. BlastRadius tells it what the code
+              has <em>historically broken</em>. It indexes the repo's git history into a local SQLite graph
+              and exposes a query surface (CLI + MCP tool) that answers: <em>"if I edit this file, what
+              fix-links, hotspots, and ownership signals are attached to it?"</em>
+            </p>
+
+            <h3>Enable</h3>
+            <CodeBlock language="bash" code={`# Feature flag during the beta rollout
+export COMPOSTO_BLASTRADIUS=1
+
+# Build the memory graph once (incremental after that)
+composto index
+
+# Query historical blast radius for a file
+composto impact src/auth/login.ts
+
+# Diagnostics
+composto index --status`} />
+
+            <h3>Example output</h3>
+            <CodeBlock language="bash" code={`verdict:    high
+score:      1.00
+confidence: 0.30
+tazelik:    fresh
+signals:
+  revert_match       ■■■■■■■■■■ strength=1.00 precision=0.50
+  hotspot            ·          strength=0.00 precision=0.30
+  fix_ratio          ·          strength=0.00 precision=0.30
+  coverage_decline   ·          strength=0.00 precision=0.30
+  author_churn       ·          strength=0.00 precision=0.30`} />
+
+            <h3>The five signals</h3>
+            <ul>
+              <li><code>revert_match</code> — file was touched by a commit that later got reverted, or by a fix within 72 hours of a prior change on the same file, or by a fix chain of ≥3 fixes clustered on the same region in 14 days.</li>
+              <li><code>hotspot</code> — touches in last 90 days, saturating at 30.</li>
+              <li><code>fix_ratio</code> — proportion of fixes in the last 30 commits touching the file; dead-zone below 30%, saturates at 80%.</li>
+              <li><code>coverage_decline</code> — bridges Composto's existing trend analysis; fires when the file's coverage trend is declining.</li>
+              <li><code>author_churn</code> — last author has gone quiet (zero commits in last 90 days → 1.0; under five commits → 0.5).</li>
+            </ul>
+
+            <h3>Honest about uncertainty</h3>
+            <p>
+              Verdict is one of <code>low</code> / <code>medium</code> / <code>high</code> / <code>unknown</code>.
+              When <code>confidence &lt; 0.3</code>, verdict is forced to <code>"unknown"</code> regardless of
+              score — the tool stays silent rather than guess. Confidence comes from the weakest link of
+              four factors (coverage, calibration maturity, index freshness, history depth).
+            </p>
+
+            <h3>MCP tool</h3>
+            <p>
+              The same data is available as the fifth MCP tool <code>composto_blastradius</code>. Agent
+              frameworks call it before proposing edits to files with non-trivial history. Returns the
+              full envelope as JSON (status, verdict, score, confidence, signals with evidence, metadata).
+            </p>
+
+            <h3>Ship gate</h3>
+            <p>
+              v1 cleared its first numerical bar on composto's own codebase:{' '}
+              <strong>precision 93.9%, recall 100%</strong> on the <code>medium|high</code> verdict band
+              against <code>fix_links</code> ground truth.{' '}
+              <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof.md" target="_blank" rel="noreferrer">
+                Full proof with caveats →
+              </a>
+            </p>
+            <p>
+              Feature-flagged until multi-repo validation (composto + vitest + one more) lands with
+              time-travel queries per the published methodology.
             </p>
           </section>
 
