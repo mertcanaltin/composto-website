@@ -71,10 +71,10 @@ function App() {
       <section id="hero">
         <Logo />
         <span className="badge">v0.6.0 | Hook-enforced</span>
-        <p className="hero-tagline">Send meaning to your LLM, not code</p>
+        <p className="hero-tagline">Causal memory layer for coding agents</p>
         <p className="subtitle">
-          89% fewer tokens. Same understanding. Composto parses your code into an AST,
-          keeps the signal, drops the noise.
+          Your agent gets repo history context before every Edit, Write, or MultiEdit.
+          Hook-enforced on Claude Code, Cursor, and Gemini CLI. Local-first, MIT.
         </p>
         <div className="cta-group">
           <a href="https://github.com/mertcanaltin/composto" className="btn btn-primary" target="_blank">
@@ -612,7 +612,7 @@ composto ir src/types.ts L0
         <div className="install-grid">
           <div className="install-option">
             <h3>MCP Plugin</h3>
-            <p className="install-desc">For Claude Code, Cursor, and any MCP client. Auto-compresses code context.</p>
+            <p className="install-desc">For Claude Code, Cursor, Gemini CLI, and any MCP client. Hook-enforced causal memory on every edit.</p>
             <CodeBlock language="bash" code={`# Install + register
 npm install -g composto-ai
 claude mcp add composto -- composto-mcp
