@@ -99,6 +99,16 @@ function App() {
 
       <div className="ticks"></div>
 
+      {/* Secondary framing — compression tools sit below the causal memory layer */}
+      <div style={{ textAlign: 'center', maxWidth: 720, margin: '64px auto 32px', padding: '0 24px' }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Also in the box</p>
+        <h2 style={{ fontSize: 32, margin: 0, lineHeight: 1.25 }}>Composto compresses your code into IR.</h2>
+        <p style={{ fontSize: 16, color: 'var(--text)', marginTop: 12 }}>
+          A tree-sitter AST compressor that reduces tokens by about 89% while keeping function signatures,
+          control flow, and imports intact. Separate from the causal layer, same binary.
+        </p>
+      </div>
+
       {/* Stats */}
       <section id="stats">
         <div className="stat">
