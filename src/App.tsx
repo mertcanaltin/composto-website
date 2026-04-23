@@ -88,6 +88,13 @@ function App() {
             Docs
           </Link>
         </div>
+        <div style={{ marginTop: 48, maxWidth: 1100, width: '100%' }}>
+          <img
+            src="/banners/composto_hero_banner_v3.svg"
+            alt="Catches the bug your agent is about to reintroduce. composto init --client=claude-code"
+            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
+          />
+        </div>
       </section>
 
       <div className="ticks"></div>
@@ -319,7 +326,14 @@ function App() {
 
       {/* BlastRadius — causal oracle */}
       <section id="blastradius">
-        <span className="badge" style={{ marginBottom: 16 }}>New · beta</span>
+        <div style={{ maxWidth: 1100, width: '100%', marginBottom: 32 }}>
+          <img
+            src="/banners/composto_before_after_banner.svg"
+            alt="With and without causal memory — same agent, same edit, different outcome."
+            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
+          />
+        </div>
+        <span className="badge" style={{ marginBottom: 16 }}>New · v0.6.0</span>
         <h2>composto_blastradius</h2>
         <p style={{ textAlign: 'center', marginBottom: 8, maxWidth: 720, margin: '0 auto 8px' }}>
           IR tells your LLM <em>what your code means</em>.{' '}
@@ -352,6 +366,31 @@ signals:
 # blastradius remembers. Your LLM couldn't.`} />
           </div>
         </div>
+
+        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
+          <img
+            src="/banners/composto_hook_strategy_wide.svg"
+            alt="Hook strategy — agent Edit call flows through PreToolUse hook, Composto queries the local graph, verdict is injected back into agent context."
+            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
+          />
+        </div>
+
+        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
+          <img
+            src="/banners/composto_4signal_architecture.svg"
+            alt="Four signals — revert_match carries the product; hotspot, fix_ratio, author_churn feed repo-calibrated precision."
+            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
+          />
+        </div>
+
+        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
+          <img
+            src="/banners/composto_honest_eval.svg"
+            alt="Honest eval — time-travel backtest rewinds the DB to pre-fix HEAD so revert_match can't see the fix."
+            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
+          />
+        </div>
+
         <div className="proof-table-wrapper" style={{ marginTop: 24 }}>
           <table className="proof-table">
             <thead>
@@ -468,6 +507,14 @@ composto impact src/auth/login.ts`} />
           <strong>When NOT to use it:</strong> fresh repos with less than ~50 commits — confidence stays low on purpose.
           The tool honestly returns <code>unknown</code> rather than guess. Value grows with the repo's history.
         </p>
+
+        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
+          <img
+            src="/banners/composto_repo_local_privacy.svg"
+            alt="Repo-local privacy — the graph stays in your repo. No cloud, no telemetry, no account."
+            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
+          />
+        </div>
       </section>
 
       <div className="ticks"></div>
