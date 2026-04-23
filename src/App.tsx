@@ -70,7 +70,7 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.4.1 | BlastRadius (beta)</span>
+        <span className="badge">v0.6.0 | Hook-enforced</span>
         <p className="hero-tagline">Send meaning to your LLM, not code</p>
         <p className="subtitle">
           89% fewer tokens. Same understanding. Composto parses your code into an AST,
@@ -338,16 +338,15 @@ composto impact scripts/demo-video.ts   # query blast radius`} />
           </div>
           <div className="target-panel">
             <h3>Composto answers:</h3>
-            <CodeBlock language="bash" code={`verdict:    high
-score:      1.00
-confidence: 0.30
+            <CodeBlock language="bash" code={`verdict:    medium
+score:      0.52
+confidence: 0.50
 tazelik:    fresh
 signals:
-  revert_match       ■■■■■■■■■■ strength=1.00 precision=0.50
-  hotspot            ·          strength=0.00 precision=0.30
-  fix_ratio          ·          strength=0.00 precision=0.30
-  coverage_decline   ·          strength=0.00 precision=0.30
-  author_churn       ·          strength=0.00 precision=0.30
+  revert_match       ■■■■■■■■■■ strength=1.00 precision=1.00
+  hotspot            ■          strength=0.10 precision=0.54
+  fix_ratio          ■          strength=0.07 precision=0.54
+  author_churn       ·          strength=0.00 precision=0.16
 
 # This file was touched by a Revert commit in history.
 # blastradius remembers. Your LLM couldn't.`} />
@@ -358,55 +357,42 @@ signals:
             <thead>
               <tr>
                 <th>Repo</th>
-                <th>Commits</th>
-                <th>Source files</th>
-                <th>Medium+ verdicts</th>
+                <th>Eval</th>
                 <th>Precision</th>
-                <th>Recall<sup>*</sup></th>
+                <th>Recall</th>
+                <th>Gate</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>composto</strong></td>
-                <td>~100</td>
-                <td>128</td>
-                <td>49</td>
-                <td>93.9%</td>
-                <td>100%</td>
-              </tr>
-              <tr>
                 <td><strong>picomatch</strong></td>
-                <td>~280</td>
-                <td>62</td>
-                <td>62</td>
-                <td>90.3%</td>
-                <td>100%</td>
+                <td>time-travel, unattributed</td>
+                <td>0.65</td>
+                <td>0.78</td>
+                <td>✅ pass</td>
               </tr>
               <tr>
-                <td><strong>zod</strong></td>
-                <td>~2,800</td>
-                <td>394</td>
-                <td>376</td>
-                <td>96.0%</td>
-                <td>99.2%</td>
+                <td><strong>composto</strong> <small>(self)</small></td>
+                <td>time-travel, unattributed</td>
+                <td>0.36</td>
+                <td>0.12</td>
+                <td>❌ fails on self</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p style={{ textAlign: 'center', marginTop: 12, fontSize: 13, color: 'var(--text)' }}>
           Ship gate: <strong>precision &gt; 60%, recall &gt; 40%</strong> on the <code>medium|high</code> verdict band.
-          All three repos pass.{' '}
-          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof.md" target="_blank" rel="noreferrer">
+          Numbers are from the honest time-travel backtest — the DB is rewound to pre-fix HEAD per event,
+          so <code>revert_match</code> can't read the fix that came later.{' '}
+          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof-v2.md" target="_blank" rel="noreferrer">
             Read the numbers →
           </a>
           <br />
           <small>
-            <sup>*</sup>Recall is scoped to files still present in the working tree. Small repos (picomatch: 62 files) tend to
-            flag most files as medium+ because fix history is dense relative to file count; precision remains a real signal,
-            recall less so. zod (394 files, ~2.8k commits) has enough spread for both to be meaningful.<br />
-            Feature-flagged via <code>COMPOSTO_BLASTRADIUS=1</code>. Five signals with repo-calibrated precision; verdict returns{' '}
-            <code>"unknown"</code> when confidence is low instead of guessing. Plan 5b will re-run these under time-travel
-            queries for stricter attribution.
+            Value scales with the repo's fix history. picomatch (mature, rich revert history) clears the gate;
+            young repos like composto-itself don't. Four signals with repo-calibrated precision; verdict returns{' '}
+            <code>"unknown"</code> when confidence is low instead of guessing.
           </small>
         </p>
 
@@ -423,20 +409,25 @@ signals:
             <div className="br-step">
               <span className="br-step-num">2</span>
               <div>
-                <h4>Index your repo once</h4>
+                <h4>One-command setup</h4>
                 <CodeBlock language="bash" code={`cd your-project
-export COMPOSTO_BLASTRADIUS=1
-composto index      # ~30ms for a 20-commit repo, scales linearly`} />
+composto init --client=claude-code     # or cursor, or gemini-cli`} />
+                <p style={{ fontSize: 13, color: 'var(--text)', marginTop: 8 }}>
+                  Writes MCP config + a <code>PreToolUse</code> hook into your AI client's settings.
+                  On every Edit / Write, the agent gets the verdict automatically as in-context
+                  guidance. Passthrough on <code>low</code>, no noise.
+                </p>
               </div>
             </div>
             <div className="br-step">
               <span className="br-step-num">3</span>
               <div>
-                <h4>Ask about any file</h4>
-                <CodeBlock language="bash" code={`composto impact src/auth/login.ts
+                <h4>Observe what happens</h4>
+                <CodeBlock language="bash" code={`composto stats            # hook invocations, verdict distribution, p50/p95 latency
+composto stats --disable  # local-only opt-out (nothing leaves your machine)
 
-# Or before any substantial edit, let your agent call
-# composto_blastradius through the MCP plugin.`} />
+# Or query on-demand, any time:
+composto impact src/auth/login.ts`} />
               </div>
             </div>
           </div>
@@ -446,10 +437,12 @@ composto index      # ~30ms for a 20-commit repo, scales linearly`} />
           <h3 style={{ textAlign: 'center', marginTop: 40, marginBottom: 12 }}>Where it fits</h3>
           <div className="br-workflow-grid">
             <div className="br-workflow">
-              <span className="br-workflow-tag">Inside Claude Code / Cursor</span>
+              <span className="br-workflow-tag">Hook-enforced (v0.6.0+)</span>
               <p>
-                Register the MCP plugin. Your agent calls <code>composto_blastradius</code> before
-                proposing significant edits. High-risk files surface a warning before the diff.
+                After <code>composto init --client=claude-code</code> (or <code>cursor</code>,{' '}
+                <code>gemini-cli</code>), every Edit / Write call goes through a <code>PreToolUse</code>{' '}
+                hook. Agent sees the verdict block inline — no "remember to call composto_blastradius."
+                p95 round-trip ≈100ms warm.
               </p>
             </div>
             <div className="br-workflow">

@@ -223,21 +223,35 @@ composto benchmark .`} />
 }`} />
 
             <p>
-              Registering the server only <em>exposes</em> the tools — Cursor's agent will still
-              default to its built-in <code>read_file</code> / <code>codebase_search</code> most of
-              the time. The fix is a project rule at <code>.cursor/rules/composto.mdc</code>. Skip
-              the manual setup and run:
+              Registering the server only <em>exposes</em> the tools. The v0.6.0 way to close the loop
+              is a <code>PreToolUse</code> hook that auto-calls <code>composto_blastradius</code>{" "}
+              before every Edit / Write / MultiEdit, injecting the verdict as in-context guidance.
+              One command:
             </p>
             <CodeBlock language="bash" code={`cd your-project
-composto init`} />
+composto init --client=claude-code     # or cursor, or gemini-cli`} />
             <p>
-              That writes <code>.cursor/mcp.json</code> and <code>.cursor/rules/composto.mdc</code> in
-              one shot. Existing files are merged, never overwritten. The rule uses{" "}
-              <code>alwaysApply: true</code>, so it's injected into every conversation's system
-              prompt — the agent learns to call <code>composto_blastradius</code> before edits,{" "}
-              <code>composto_context</code> for bug-fix tasks, and <code>composto_ir</code> instead
-              of <code>read_file</code> for "what does this do" questions. Without the rule, hit
-              rate is ~30-50%; with it, ~85-95%.
+              This writes the platform's MCP config AND the hook entry into the platform's settings
+              file (<code>.claude/settings.json</code>, <code>.cursor/hooks.json</code>, or{" "}
+              <code>~/.gemini/settings.json</code>). Existing settings are merged, never
+              overwritten. Re-running is idempotent.
+            </p>
+            <p>
+              On Cursor specifically the strategy is hybrid: <code>permissionDecision: "deny"</code>{" "}
+              on <code>verdict: high</code> (Cursor's <code>additional_context</code> is dropped per
+              forum #155689), while <code>medium</code> / <code>low</code> are carried by the
+              existing <code>.cursor/rules/composto.mdc</code> rule that <code>composto init</code>{" "}
+              still writes.
+            </p>
+            <p>
+              Observe what's happening:
+            </p>
+            <CodeBlock language="bash" code={`composto stats            # hook invocations, verdict distribution, p50/p95 latency
+composto stats --json     # machine-readable
+composto stats --disable  # local-only opt-out (writes .composto/telemetry-disabled)`} />
+            <p style={{ fontSize: 13, color: 'var(--text)' }}>
+              Telemetry is local-only — writes to <code>.composto/memory.db</code> in your repo.
+              Nothing leaves your machine. No user ID, no cloud sync, no account.
             </p>
 
             <p><strong>Claude Desktop</strong> — same block in <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
@@ -347,25 +361,29 @@ composto impact src/auth/login.ts
 composto index --status`} />
 
             <h3>Example output</h3>
-            <CodeBlock language="bash" code={`verdict:    high
-score:      1.00
-confidence: 0.30
+            <CodeBlock language="bash" code={`verdict:    medium
+score:      0.52
+confidence: 0.50
 tazelik:    fresh
 signals:
-  revert_match       ■■■■■■■■■■ strength=1.00 precision=0.50
-  hotspot            ·          strength=0.00 precision=0.30
-  fix_ratio          ·          strength=0.00 precision=0.30
-  coverage_decline   ·          strength=0.00 precision=0.30
-  author_churn       ·          strength=0.00 precision=0.30`} />
+  revert_match       ■■■■■■■■■■ strength=1.00 precision=1.00
+  hotspot            ■          strength=0.10 precision=0.54
+  fix_ratio          ■          strength=0.07 precision=0.54
+  author_churn       ·          strength=0.00 precision=0.16`} />
 
-            <h3>The five signals</h3>
+            <h3>The four signals</h3>
             <ul>
               <li><code>revert_match</code> — file was touched by a commit that later got reverted, or by a fix within 72 hours of a prior change on the same file, or by a fix chain of ≥3 fixes clustered on the same region in 14 days.</li>
-              <li><code>hotspot</code> — touches in last 90 days, saturating at 30.</li>
+              <li><code>hotspot</code> — touches in a 90-day window before the DB's latest commit (not wall-clock), saturating at 30. <em>Currently fires at noise-floor strength on most repos; a strength-curve redesign is the open follow-on (Plan 5c).</em></li>
               <li><code>fix_ratio</code> — proportion of fixes in the last 30 commits touching the file; dead-zone below 30%, saturates at 80%.</li>
-              <li><code>coverage_decline</code> — bridges Composto's existing trend analysis; fires when the file's coverage trend is declining.</li>
-              <li><code>author_churn</code> — last author has gone quiet (zero commits in last 90 days → 1.0; under five commits → 0.5).</li>
+              <li><code>author_churn</code> — last author has gone quiet (zero commits in the DB-relative 90d window → 1.0; under five commits → 0.5). The DB-relative window means this stays meaningful on time-travel snapshots.</li>
             </ul>
+            <p style={{ fontSize: 13, color: 'var(--text)' }}>
+              The previous <code>coverage_decline</code> signal was retired in v0.5.0 — it expected a
+              coverage-data ingestion pipeline v1 didn't have, and fired at 0% across real repos.
+              See the <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof-v2.md" target="_blank" rel="noreferrer">honest time-travel proof</a> and{' '}
+              <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-signal-diagnostic.md" target="_blank" rel="noreferrer">per-signal diagnostic</a> for what carries the product and what doesn't.
+            </p>
 
             <h3>Honest about uncertainty</h3>
             <p>
@@ -377,9 +395,12 @@ signals:
 
             <h3>MCP tool</h3>
             <p>
-              The same data is available as the fifth MCP tool <code>composto_blastradius</code>. Agent
+              The same data is available as the MCP tool <code>composto_blastradius</code>. Agent
               frameworks call it before proposing edits to files with non-trivial history. Returns the
               full envelope as JSON (status, verdict, score, confidence, signals with evidence, metadata).
+              With the v0.6.0 hook wiring (<code>composto init --client=&lt;name&gt;</code>), the
+              agent doesn't need to remember — the hook invokes it automatically on every file-
+              targeting tool call.
             </p>
 
             <h3>Ship gate</h3>
