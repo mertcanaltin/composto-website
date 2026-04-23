@@ -99,7 +99,7 @@ function App() {
 
       <div className="ticks"></div>
 
-      {/* Secondary framing — compression tools sit below the causal memory layer */}
+      {/* Secondary framing, compression tools sit below the causal memory layer */}
       <div style={{ textAlign: 'center', maxWidth: 720, margin: '64px auto 32px', padding: '0 24px' }}>
         <p style={{ fontSize: 14, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Also in the box</p>
         <h2 style={{ fontSize: 32, margin: 0, lineHeight: 1.25 }}>Composto compresses your code into IR.</h2>
@@ -334,26 +334,28 @@ function App() {
 
       <div className="ticks"></div>
 
-      {/* BlastRadius — causal oracle */}
+      {/* BlastRadius, causal oracle */}
       <section id="blastradius">
-        <div style={{ maxWidth: 1100, width: '100%', marginBottom: 32 }}>
+        <div style={{ maxWidth: 1100, width: '100%', margin: '0 auto', marginBottom: 8 }}>
           <img
             src="/banners/composto_before_after_banner.svg"
-            alt="With and without causal memory — same agent, same edit, different outcome."
+            alt="With and without causal memory, same agent, same edit, different outcome."
             style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
           />
         </div>
-        <span className="badge" style={{ marginBottom: 16 }}>New · v0.6.0</span>
-        <h2>composto_blastradius</h2>
-        <p style={{ textAlign: 'center', marginBottom: 8, maxWidth: 720, margin: '0 auto 8px' }}>
-          IR tells your LLM <em>what your code means</em>.{' '}
-          <strong>BlastRadius tells it what your code has historically broken.</strong>
-        </p>
-        <p style={{ textAlign: 'center', marginBottom: 24, maxWidth: 720, margin: '0 auto 24px', fontSize: 14, color: 'var(--text)' }}>
-          Before your agent edits a file it can ask: has this region been reverted? is there a fix cluster?
-          is the last author still around? Signals your LLM can't infer from current code — the data lives
-          in the delta between past states of the repo.
-        </p>
+        <div style={{ textAlign: 'center', maxWidth: 760, margin: '40px auto 0', padding: '0 24px' }}>
+          <span className="badge" style={{ display: 'inline-block', marginBottom: 20 }}>New · v0.6.0</span>
+          <h2 style={{ margin: '0 0 20px', lineHeight: 1.15 }}>composto_blastradius</h2>
+          <p style={{ margin: '0 auto 16px', fontSize: 19, lineHeight: 1.55, maxWidth: 680 }}>
+            IR tells your LLM <em>what your code means</em>.{' '}
+            <strong>BlastRadius tells it what your code has historically broken.</strong>
+          </p>
+          <p style={{ margin: '0 auto', fontSize: 15, lineHeight: 1.7, color: 'var(--text)', maxWidth: 680 }}>
+            Before your agent edits a file it can ask: has this region been reverted? Is there a fix cluster?
+            Is the last author still around? Signals your LLM can't infer from current code, because the data
+            lives in the delta between past states of the repo.
+          </p>
+        </div>
         <div className="target-demo">
           <div className="target-panel">
             <h3>You ask:</h3>
@@ -380,7 +382,7 @@ signals:
         <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
           <img
             src="/banners/composto_hook_strategy_wide.svg"
-            alt="Hook strategy — agent Edit call flows through PreToolUse hook, Composto queries the local graph, verdict is injected back into agent context."
+            alt="Hook strategy, agent Edit call flows through PreToolUse hook, Composto queries the local graph, verdict is injected back into agent context."
             style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
           />
         </div>
@@ -388,7 +390,7 @@ signals:
         <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
           <img
             src="/banners/composto_4signal_architecture.svg"
-            alt="Four signals — revert_match carries the product; hotspot, fix_ratio, author_churn feed repo-calibrated precision."
+            alt="Four signals, revert_match carries the product; hotspot, fix_ratio, author_churn feed repo-calibrated precision."
             style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
           />
         </div>
@@ -396,7 +398,7 @@ signals:
         <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
           <img
             src="/banners/composto_honest_eval.svg"
-            alt="Honest eval — time-travel backtest rewinds the DB to pre-fix HEAD so revert_match can't see the fix."
+            alt="Honest eval, time-travel backtest rewinds the DB to pre-fix HEAD so revert_match can't see the fix."
             style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
           />
         </div>
@@ -432,7 +434,7 @@ signals:
         </div>
         <p style={{ textAlign: 'center', marginTop: 12, fontSize: 13, color: 'var(--text)' }}>
           Ship gate: <strong>precision &gt; 60%, recall &gt; 40%</strong> on the <code>medium|high</code> verdict band.
-          Numbers are from the honest time-travel backtest — the DB is rewound to pre-fix HEAD per event,
+          Numbers are from the honest time-travel backtest. The DB is rewound to pre-fix HEAD per event,
           so <code>revert_match</code> can't read the fix that came later.{' '}
           <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof-v2.md" target="_blank" rel="noreferrer">
             Read the numbers →
@@ -490,7 +492,7 @@ composto impact src/auth/login.ts`} />
               <p>
                 After <code>composto init --client=claude-code</code> (or <code>cursor</code>,{' '}
                 <code>gemini-cli</code>), every Edit / Write call goes through a <code>PreToolUse</code>{' '}
-                hook. Agent sees the verdict block inline — no "remember to call composto_blastradius."
+                hook. Agent sees the verdict block inline, no "remember to call composto_blastradius."
                 p95 round-trip ≈100ms warm.
               </p>
             </div>
@@ -514,14 +516,14 @@ composto impact src/auth/login.ts`} />
         </div>
 
         <p style={{ textAlign: 'center', marginTop: 32, fontSize: 13, color: 'var(--text)' }}>
-          <strong>When NOT to use it:</strong> fresh repos with less than ~50 commits — confidence stays low on purpose.
+          <strong>When NOT to use it:</strong> fresh repos with less than ~50 commits, confidence stays low on purpose.
           The tool honestly returns <code>unknown</code> rather than guess. Value grows with the repo's history.
         </p>
 
         <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
           <img
             src="/banners/composto_repo_local_privacy.svg"
-            alt="Repo-local privacy — the graph stays in your repo. No cloud, no telemetry, no account."
+            alt="Repo-local privacy, the graph stays in your repo. No cloud, no telemetry, no account."
             style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
           />
         </div>

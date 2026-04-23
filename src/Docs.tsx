@@ -213,7 +213,7 @@ composto benchmark .`} />
             <p><strong>Claude Code</strong></p>
             <CodeBlock language="bash" code={`claude mcp add composto -- composto-mcp`} />
 
-            <p><strong>Cursor</strong> — add to <code>~/.cursor/mcp.json</code> (or project-local <code>.cursor/mcp.json</code>), then restart Cursor and check Settings → MCP:</p>
+            <p><strong>Cursor</strong>: add to <code>~/.cursor/mcp.json</code> (or project-local <code>.cursor/mcp.json</code>), then restart Cursor and check Settings → MCP:</p>
             <CodeBlock language="bash" code={`{
   "mcpServers": {
     "composto": {
@@ -250,11 +250,11 @@ composto init --client=claude-code     # or cursor, or gemini-cli`} />
 composto stats --json     # machine-readable
 composto stats --disable  # local-only opt-out (writes .composto/telemetry-disabled)`} />
             <p style={{ fontSize: 13, color: 'var(--text)' }}>
-              Telemetry is local-only — writes to <code>.composto/memory.db</code> in your repo.
+              Telemetry is local-only, writes to <code>.composto/memory.db</code> in your repo.
               Nothing leaves your machine. No user ID, no cloud sync, no account.
             </p>
 
-            <p><strong>Claude Desktop</strong> — same block in <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
+            <p><strong>Claude Desktop</strong>: same block in <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>:</p>
             <CodeBlock language="bash" code={`{
   "mcpServers": {
     "composto": {
@@ -373,13 +373,13 @@ signals:
 
             <h3>The four signals</h3>
             <ul>
-              <li><code>revert_match</code> — file was touched by a commit that later got reverted, or by a fix within 72 hours of a prior change on the same file, or by a fix chain of ≥3 fixes clustered on the same region in 14 days.</li>
-              <li><code>hotspot</code> — touches in a 90-day window before the DB's latest commit (not wall-clock), saturating at 30. <em>Currently fires at noise-floor strength on most repos; a strength-curve redesign is the open follow-on (Plan 5c).</em></li>
-              <li><code>fix_ratio</code> — proportion of fixes in the last 30 commits touching the file; dead-zone below 30%, saturates at 80%.</li>
-              <li><code>author_churn</code> — last author has gone quiet (zero commits in the DB-relative 90d window → 1.0; under five commits → 0.5). The DB-relative window means this stays meaningful on time-travel snapshots.</li>
+              <li><code>revert_match</code>: file was touched by a commit that later got reverted, or by a fix within 72 hours of a prior change on the same file, or by a fix chain of ≥3 fixes clustered on the same region in 14 days.</li>
+              <li><code>hotspot</code>: touches in a 90-day window before the DB's latest commit (not wall-clock), saturating at 30. <em>Currently fires at noise-floor strength on most repos; a strength-curve redesign is the open follow-on (Plan 5c).</em></li>
+              <li><code>fix_ratio</code>: proportion of fixes in the last 30 commits touching the file; dead-zone below 30%, saturates at 80%.</li>
+              <li><code>author_churn</code>: last author has gone quiet (zero commits in the DB-relative 90d window → 1.0; under five commits → 0.5). The DB-relative window means this stays meaningful on time-travel snapshots.</li>
             </ul>
             <p style={{ fontSize: 13, color: 'var(--text)' }}>
-              The previous <code>coverage_decline</code> signal was retired in v0.5.0 — it expected a
+              The previous <code>coverage_decline</code> signal was retired in v0.5.0. It expected a
               coverage-data ingestion pipeline v1 didn't have, and fired at 0% across real repos.
               See the <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof-v2.md" target="_blank" rel="noreferrer">honest time-travel proof</a> and{' '}
               <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-signal-diagnostic.md" target="_blank" rel="noreferrer">per-signal diagnostic</a> for what carries the product and what doesn't.
@@ -389,7 +389,7 @@ signals:
             <p>
               Verdict is one of <code>low</code> / <code>medium</code> / <code>high</code> / <code>unknown</code>.
               When <code>confidence &lt; 0.3</code>, verdict is forced to <code>"unknown"</code> regardless of
-              score — the tool stays silent rather than guess. Confidence comes from the weakest link of
+              score, the tool stays silent rather than guess. Confidence comes from the weakest link of
               four factors (coverage, calibration maturity, index freshness, history depth).
             </p>
 
@@ -399,7 +399,7 @@ signals:
               frameworks call it before proposing edits to files with non-trivial history. Returns the
               full envelope as JSON (status, verdict, score, confidence, signals with evidence, metadata).
               With the v0.6.0 hook wiring (<code>composto init --client=&lt;name&gt;</code>), the
-              agent doesn't need to remember — the hook invokes it automatically on every file-
+              agent doesn't need to remember. The hook invokes it automatically on every file-
               targeting tool call.
             </p>
 
