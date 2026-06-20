@@ -328,26 +328,19 @@ function App() {
 
       <div className="ticks"></div>
 
-      {/* BlastRadius, causal oracle */}
+      {/* Causal context, advisory layer on top of compression */}
       <section id="blastradius">
-        <div style={{ maxWidth: 1100, width: '100%', margin: '0 auto', marginBottom: 8 }}>
-          <img
-            src="/banners/composto_before_after_banner.svg"
-            alt="With and without causal memory, same agent, same edit, different outcome."
-            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
-          />
-        </div>
-        <div style={{ textAlign: 'center', maxWidth: 760, margin: '40px auto 0', padding: '0 24px' }}>
-          <span className="badge" style={{ display: 'inline-block', marginBottom: 20 }}>New · v0.6.0</span>
-          <h2 style={{ margin: '0 0 20px', lineHeight: 1.15 }}>composto_blastradius</h2>
+        <div style={{ textAlign: 'center', maxWidth: 760, margin: '0 auto', padding: '0 24px' }}>
+          <span className="badge" style={{ display: 'inline-block', marginBottom: 20 }}>Advisory layer</span>
+          <h2 style={{ margin: '0 0 20px', lineHeight: 1.15 }}>Causal context</h2>
           <p style={{ margin: '0 auto 16px', fontSize: 19, lineHeight: 1.55, maxWidth: 680 }}>
-            IR tells your LLM <em>what your code means</em>.{' '}
-            <strong>BlastRadius tells it what your code has historically broken.</strong>
+            IR tells your agent <em>what your code means</em>.{' '}
+            <strong>Composto also tells it what has historically changed and broken together.</strong>
           </p>
           <p style={{ margin: '0 auto', fontSize: 15, lineHeight: 1.7, color: 'var(--text)', maxWidth: 680 }}>
-            Before your agent edits a file it can ask: has this region been reverted? Is there a fix cluster?
-            Is the last author still around? Signals your LLM can't infer from current code, because the data
-            lives in the delta between past states of the repo.
+            Before editing a file, the agent can see: has this region been reverted? Is there a fix cluster?
+            What files co-changed with it in past fixes? Context your LLM can't infer from current code,
+            surfaced as advisory signal the agent weighs, not a gate.
           </p>
         </div>
         <div className="target-demo">
@@ -373,14 +366,6 @@ signals:
           <img
             src="/banners/composto_hook_strategy_wide.svg"
             alt="Hook strategy, agent Edit call flows through PreToolUse hook, Composto queries the local graph, verdict is injected back into agent context."
-            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
-          />
-        </div>
-
-        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
-          <img
-            src="/banners/composto_4signal_architecture.svg"
-            alt="Four signals, revert_match carries the product; hotspot, fix_ratio, author_churn feed repo-calibrated precision."
             style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
           />
         </div>
