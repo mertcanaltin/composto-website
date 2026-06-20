@@ -26,6 +26,20 @@
   }
 }
 
+.hero-slogan {
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--text-h);
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+  max-width: 640px;
+  margin: 0;
+
+  @media (max-width: 1024px) {
+    font-size: 24px;
+  }
+}
+
 .badge {
   font-size: 14px;
   font-weight: 500;

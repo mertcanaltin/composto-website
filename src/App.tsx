@@ -72,6 +72,7 @@ function App() {
         <Logo />
         <span className="badge">v0.7 | Local-first, MIT</span>
         <p className="hero-tagline">Token-efficient code context for AI agents</p>
+        <p className="hero-slogan">Send your agent the structure, not the noise.</p>
         <p className="subtitle">
           Composto compresses any file into a structure-preserving IR, your agent gets the
           full shape of the code at 60-95% fewer tokens, with its causal history baked in.
