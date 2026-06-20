@@ -361,20 +361,21 @@ composto impact src/auth/login.ts
 composto index --status`} />
 
             <h3>Example output</h3>
-            <CodeBlock language="bash" code={`verdict:    medium
-score:      0.52
-confidence: 0.50
-tazelik:    fresh
+            <CodeBlock language="bash" code={`tazelik: fresh
 signals:
-  revert_match       ■■■■■■■■■■ strength=1.00 precision=1.00
-  hotspot            ■          strength=0.10 precision=0.54
-  fix_ratio          ■          strength=0.07 precision=0.54
-  author_churn       ·          strength=0.00 precision=0.16`} />
+  revert_match   ■■■■■■■■■■ touched by a Revert commit in history
+  cochange       ■■■■■      co-changed with session.ts, token.ts in past fixes
+  hotspot        ■          14 changes in the last 90 days
+  fix_ratio      ■          fixes are a high share of recent changes
+  author_churn   ·          last author still active
 
-            <h3>The four signals</h3>
+# Advisory context the agent weighs, not a blocking verdict.`} />
+
+            <h3>The five signals</h3>
             <ul>
-              <li><code>revert_match</code>: file was touched by a commit that later got reverted, or by a fix within 72 hours of a prior change on the same file, or by a fix chain of ≥3 fixes clustered on the same region in 14 days.</li>
-              <li><code>hotspot</code>: touches in a 90-day window before the DB's latest commit (not wall-clock), saturating at 30. <em>Currently fires at noise-floor strength on most repos; a strength-curve redesign is the open follow-on (Plan 5c).</em></li>
+              <li><code>revert_match</code>: file was touched by a commit that later got reverted, or by a fix within 72 hours of a prior change on the same file, or by a fix chain of ≥3 fixes clustered on the same region in 14 days. Carries most of the recall.</li>
+              <li><code>cochange</code>: how many other files this one has historically co-changed with in fix commits, the coupling signal. A weak discriminator on its own (used as advisory context, not a gate).</li>
+              <li><code>hotspot</code>: touches in a 90-day window before the DB's latest commit (not wall-clock), saturating at 30.</li>
               <li><code>fix_ratio</code>: proportion of fixes in the last 30 commits touching the file; dead-zone below 30%, saturates at 80%.</li>
               <li><code>author_churn</code>: last author has gone quiet (zero commits in the DB-relative 90d window → 1.0; under five commits → 0.5). The DB-relative window means this stays meaningful on time-travel snapshots.</li>
             </ul>

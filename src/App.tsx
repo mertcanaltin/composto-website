@@ -70,11 +70,12 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.6.0 | Hook-enforced</span>
-        <p className="hero-tagline">Causal memory layer for coding agents</p>
+        <span className="badge">v0.7 | Local-first, MIT</span>
+        <p className="hero-tagline">Token-efficient code context for AI agents</p>
         <p className="subtitle">
-          Your agent gets repo history context before every Edit, Write, or MultiEdit.
-          Hook-enforced on Claude Code, Cursor, and Gemini CLI. Local-first, MIT.
+          Composto compresses any file into a structure-preserving IR, your agent gets the
+          full shape of the code at 60-95% fewer tokens, with its causal history baked in.
+          Works with Claude Code, Cursor, and Gemini CLI.
         </p>
         <div className="cta-group">
           <a href="https://github.com/mertcanaltin/composto" className="btn btn-primary" target="_blank">
@@ -88,24 +89,17 @@ function App() {
             Docs
           </Link>
         </div>
-        <div style={{ marginTop: 48, maxWidth: 1100, width: '100%' }}>
-          <img
-            src="/banners/composto_hero_banner_v3.svg"
-            alt="Catches the bug your agent is about to reintroduce. composto init --client=claude-code"
-            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
-          />
-        </div>
       </section>
 
       <div className="ticks"></div>
 
-      {/* Secondary framing, compression tools sit below the causal memory layer */}
+      {/* On top of compression: causal history as advisory context */}
       <div style={{ textAlign: 'center', maxWidth: 720, margin: '64px auto 32px', padding: '0 24px' }}>
-        <p style={{ fontSize: 14, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Also in the box</p>
-        <h2 style={{ fontSize: 32, margin: 0, lineHeight: 1.25 }}>Composto compresses your code into IR.</h2>
+        <p style={{ fontSize: 14, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>On top of the IR</p>
+        <h2 style={{ fontSize: 32, margin: 0, lineHeight: 1.25 }}>It also remembers what broke together.</h2>
         <p style={{ fontSize: 16, color: 'var(--text)', marginTop: 12 }}>
-          A tree-sitter AST compressor that reduces tokens by about 89% while keeping function signatures,
-          control flow, and imports intact. Separate from the causal layer, same binary.
+          Composto indexes your git history and surfaces what historically changed and broke alongside
+          the file you're editing, advisory context your agent weighs, not a gate. Same binary.
         </p>
       </div>
 
@@ -364,18 +358,14 @@ composto impact scripts/demo-video.ts   # query blast radius`} />
           </div>
           <div className="target-panel">
             <h3>Composto answers:</h3>
-            <CodeBlock language="bash" code={`verdict:    medium
-score:      0.52
-confidence: 0.50
-tazelik:    fresh
+            <CodeBlock language="bash" code={`tazelik: fresh
 signals:
-  revert_match       ■■■■■■■■■■ strength=1.00 precision=1.00
-  hotspot            ■          strength=0.10 precision=0.54
-  fix_ratio          ■          strength=0.07 precision=0.54
-  author_churn       ·          strength=0.00 precision=0.16
+  revert_match   ■■■■■■■■■■ touched by a Revert commit in history
+  cochange       ■■■■■      co-changed with session.ts, token.ts in past fixes
+  hotspot        ■          14 changes in the last 90 days
 
-# This file was touched by a Revert commit in history.
-# blastradius remembers. Your LLM couldn't.`} />
+# Advisory context: these files have a history of
+# breaking together. Your agent weighs it, you decide.`} />
           </div>
         </div>
 
@@ -408,42 +398,42 @@ signals:
             <thead>
               <tr>
                 <th>Repo</th>
-                <th>Eval</th>
-                <th>Precision</th>
+                <th>Commits</th>
                 <th>Recall</th>
-                <th>Gate</th>
+                <th>What it means</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>picomatch</strong></td>
-                <td>time-travel, unattributed</td>
-                <td>0.65</td>
-                <td>0.78</td>
-                <td>✅ pass</td>
+                <td><strong>express</strong></td>
+                <td>6,153</td>
+                <td>0.80</td>
+                <td>finds 80% of files a fix actually touched</td>
               </tr>
               <tr>
-                <td><strong>composto</strong> <small>(self)</small></td>
-                <td>time-travel, unattributed</td>
-                <td>0.36</td>
-                <td>0.12</td>
-                <td>❌ fails on self</td>
+                <td><strong>fastify</strong></td>
+                <td>4,744</td>
+                <td>0.67</td>
+                <td>recall grows with history depth</td>
+              </tr>
+              <tr>
+                <td><strong>composto</strong> <small>(young)</small></td>
+                <td>149</td>
+                <td>0.14</td>
+                <td>thin history → little signal yet</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p style={{ textAlign: 'center', marginTop: 12, fontSize: 13, color: 'var(--text)' }}>
-          Ship gate: <strong>precision &gt; 60%, recall &gt; 40%</strong> on the <code>medium|high</code> verdict band.
-          Numbers are from the honest time-travel backtest. The DB is rewound to pre-fix HEAD per event,
-          so <code>revert_match</code> can't read the fix that came later.{' '}
-          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof-v2.md" target="_blank" rel="noreferrer">
-            Read the numbers →
-          </a>
+          Honest time-travel backtest: the DB is rewound to each pre-fix snapshot, so the signals
+          can't see the fix that came later. The causal layer is <strong>high-recall, advisory-grade</strong>,
+          on mature repos it recovers 67-80% of the files a fix touched. Precision is modest (~0.55), which is
+          why Composto surfaces these as <em>context the agent judges</em>, not a blocking verdict.
           <br />
           <small>
-            Value scales with the repo's fix history. picomatch (mature, rich revert history) clears the gate;
-            young repos like composto-itself don't. Four signals with repo-calibrated precision; verdict returns{' '}
-            <code>"unknown"</code> when confidence is low instead of guessing.
+            Recall scales with the repo's fix history, mature repos get strong recall, young repos get little
+            until history accumulates. The verdict returns <code>"unknown"</code> when confidence is low instead of guessing.
           </small>
         </p>
 
