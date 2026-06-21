@@ -94,6 +94,24 @@ function App() {
 
       <div className="ticks"></div>
 
+      {/* Use it in 3 steps */}
+      <section id="get-started-3" style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px' }}>
+        <h2 style={{ textAlign: 'center' }}>Use it in 3 steps</h2>
+        <CodeBlock language="bash" code={`# 1. Install
+npm install -g composto-ai
+
+# 2. See the value on your own repo (local, no API key, ~2s)
+cd your-project && composto benchmark .
+
+# 3. Wire it into your AI agent, context goes compact automatically
+composto init --client=claude-code   # or cursor, gemini-cli`} />
+        <p style={{ textAlign: 'center', marginTop: 12, fontSize: 14, color: 'var(--text)' }}>
+          Your agent now reads structure-preserving IR instead of raw files. Existing settings are merged, never overwritten.
+        </p>
+      </section>
+
+      <div className="ticks"></div>
+
       {/* On top of compression: causal history as advisory context */}
       <div style={{ textAlign: 'center', maxWidth: 720, margin: '64px auto 32px', padding: '0 24px' }}>
         <p style={{ fontSize: 14, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>On top of the IR</p>
