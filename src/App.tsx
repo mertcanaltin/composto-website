@@ -3,7 +3,6 @@ import './App.css'
 import { Logo } from './components/Logo'
 import { CodeBlock } from './components/CodeBlock'
 import { CodeSlider } from './components/CodeSlider'
-// TokenBackground removed
 import { LiveDemo } from './components/LiveDemo'
 
 const RAW_CODE = `import Fastify from "fastify";
@@ -57,11 +56,11 @@ USE:pg
 USE:jsonwebtoken
 USE:bcrypt
 FN:app.post("/api/auth/login") =>
-    IF:!email || !password \u2192 RET reply.code(400)
+    IF:!email || !password → RET reply.code(400)
     AWAIT:result = pool.query("SELECT * FROM users...")
-    IF:!user \u2192 RET reply.code(401)
+    IF:!user → RET reply.code(401)
     AWAIT:valid = bcrypt.compare(password, user.password_hash)
-    IF:!valid \u2192 RET reply.code(401)
+    IF:!valid → RET reply.code(401)
     RET reply.send({ token, user })`
 
 function App() {
@@ -70,13 +69,13 @@ function App() {
       {/* Hero */}
       <section id="hero">
         <Logo />
-        <span className="badge">v0.7 | Local-first, MIT</span>
-        <p className="hero-tagline">Token-efficient code context for AI agents</p>
-        <p className="hero-slogan">Send your agent the structure, not the noise.</p>
+        <span className="badge">v0.13 | Local-first, MIT</span>
+        <p className="hero-tagline">Decides what your coding agent reads</p>
+        <p className="hero-slogan">And tells you when it doesn't know.</p>
         <p className="subtitle">
-          Composto compresses any file into a structure-preserving IR, your agent gets the
-          full shape of the code at 60-95% fewer tokens, with its causal history baked in.
-          Works with Claude Code, Cursor, and Gemini CLI.
+          Your agent has a token budget and a repo with thousands of files. Composto builds a
+          ranked structural map of that repo, points at the file and the lines that matter, and
+          says out loud when the map is incomplete. Works with Claude Code, Cursor, and Gemini CLI.
         </p>
         <div className="cta-group">
           <a href="https://github.com/mertcanaltin/composto" className="btn btn-primary" target="_blank">
@@ -94,212 +93,221 @@ function App() {
 
       <div className="ticks"></div>
 
+      {/* The problem, concretely */}
+      <section id="problem">
+        <h2 style={{ textAlign: 'center' }}>A repo map that runs out of budget is not a map</h2>
+        <p style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto 28px' }}>
+          Until v0.13, Composto packed files in whatever order it walked the directory tree, then
+          stopped when the budget ran out. Here is what that produced on the Node.js repository.
+        </p>
+        <div className="target-demo">
+          <div className="target-panel">
+            <h3>Before</h3>
+            <CodeBlock language="bash" code={`composto context --budget 4000
+
+  22491 files
+
+  android_configure.py
+  benchmark/_cli.js
+  benchmark/abort_controller/...
+  ...253 files, budget gone
+
+# Zero files from lib/.
+# None of Node's runtime
+# source is in the map.`} />
+          </div>
+          <div className="target-panel">
+            <h3>After</h3>
+            <CodeBlock language="bash" code={`composto context --budget 4000
+
+  22491 files
+
+  lib/domain.js
+  lib/tls.js
+  lib/ffi.js
+  lib/internal/modules/esm/...
+  ...
+
+  Omitted: 22445 files did
+  not fit, this map is partial.`} />
+          </div>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 20, fontSize: 15, maxWidth: 700, margin: '20px auto 0' }}>
+          The agent asking "where does this behaviour live" went from finding the right file{' '}
+          <strong>1 time in 100</strong> to <strong>22 times in 100</strong>, at the same budget.
+        </p>
+      </section>
+
+      {/* Stats */}
+      <section id="stats">
+        <div className="stat">
+          <div className="stat-value">22%</div>
+          <div className="stat-label">Right file in the map, up from 1% (Node.js, 22,491 files, 4K budget)</div>
+        </div>
+        <div className="stat">
+          <div className="stat-value">35&times;</div>
+          <div className="stat-label">Closer to the top of the list (Bun, rank 255 → 7)</div>
+        </div>
+        <div className="stat">
+          <div className="stat-value">&ge;93%</div>
+          <div className="stat-label">--target lands on the file that declares the symbol, 5 repos</div>
+        </div>
+        <div className="stat">
+          <div className="stat-value">22,445</div>
+          <div className="stat-label">Files it tells you it left out</div>
+        </div>
+      </section>
+
+      <div className="ticks"></div>
+
+      {/* Measured, including where it loses */}
+      <section id="proof">
+        <h2 style={{ textAlign: 'center' }}>Measured on repos you know</h2>
+        <p style={{ textAlign: 'center', marginBottom: 8, maxWidth: 720, margin: '0 auto 20px' }}>
+          Sample 100 symbols a real commit touched, ask whether the file declaring each one is in
+          the map. Ground truth comes from git history; the ranking only sees file paths and
+          structure, so the benchmark cannot confirm itself.
+        </p>
+        <div className="proof-table-wrapper">
+        <table className="proof-table">
+          <thead>
+            <tr>
+              <th>Repo</th>
+              <th>Files</th>
+              <th>Walk order</th>
+              <th>Ranked</th>
+              <th>Rank of the answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Node.js</strong></td>
+              <td>22,491</td>
+              <td>1%</td>
+              <td>22%</td>
+              <td>92 → 24</td>
+            </tr>
+            <tr>
+              <td><strong>Bun</strong></td>
+              <td>6,340</td>
+              <td>16%</td>
+              <td>25%</td>
+              <td>255 → 7</td>
+            </tr>
+            <tr>
+              <td><strong>Deno</strong></td>
+              <td>4,272</td>
+              <td>5%</td>
+              <td>7%</td>
+              <td>30 → 18</td>
+            </tr>
+            <tr>
+              <td><strong>undici</strong></td>
+              <td>626</td>
+              <td>72%</td>
+              <td>80%</td>
+              <td>120 → 49</td>
+            </tr>
+            <tr>
+              <td><strong>Fastify</strong></td>
+              <td>296</td>
+              <td>97%</td>
+              <td>100%</td>
+              <td>132 → 54</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 14, maxWidth: 720, margin: '16px auto 0' }}>
+          Read the Deno row: <strong>7%</strong>. Its source lives in <code>ext/</code>,{' '}
+          <code>cli/</code> and <code>runtime/</code>, which the ranking does not yet recognise as
+          source roots. Composto helps most where the budget genuinely binds and least where the
+          layout is unfamiliar to it. The harness is in the repo, run it on yours.
+        </p>
+        <p style={{ textAlign: 'center', marginTop: 12, fontSize: 13 }}>
+          <a href="https://github.com/mertcanaltin/composto/blob/master/scripts/discovery-eval.ts" target="_blank">
+            scripts/discovery-eval.ts
+          </a>
+        </p>
+      </section>
+
+      <div className="ticks"></div>
+
+      {/* Honesty as a feature */}
+      <section id="honesty">
+        <h2 style={{ textAlign: 'center' }}>It tells you what it does not know</h2>
+        <p style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto 28px' }}>
+          A partial map that reads as complete is worse than no map: the agent stops looking and
+          concludes the code does not exist. Every answer carries its own limits.
+        </p>
+        <div className="target-demo">
+          <div className="target-panel">
+            <h3>When the budget binds</h3>
+            <CodeBlock language="bash" code={`Omitted: 22445 files did not fit,
+this map is partial. Raise --budget
+to widen it.
+
+# Absence from the map is not
+# evidence of absence from the repo.`} />
+          </div>
+          <div className="target-panel">
+            <h3>When it locates a target</h3>
+            <CodeBlock language="bash" code={`composto context --target permission
+
+Target: lib/internal/process/permission.js
+coverage: high (exact symbol)
+
+# medium  matched by filename, verify it
+# low     only found as a reference
+# none    not found, say so and stop`} />
+          </div>
+        </div>
+      </section>
+
+      <div className="ticks"></div>
+
       {/* Use it in 3 steps */}
       <section id="get-started-3" style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px' }}>
         <h2 style={{ textAlign: 'center' }}>Use it in 3 steps</h2>
         <CodeBlock language="bash" code={`# 1. Install
 npm install -g composto-ai
 
-# 2. See the value on your own repo (local, no API key, ~2s)
-cd your-project && composto benchmark .
+# 2. See what your agent would get, local, no API key
+cd your-project && composto context --budget 4000
 
-# 3. Wire it into your AI agent, context goes compact automatically
-composto init --client=claude-code   # or cursor, gemini-cli`} />
+# 3. Wire it into your agent
+composto init --client=claude-code --with-compress   # or cursor, gemini-cli`} />
         <p style={{ textAlign: 'center', marginTop: 12, fontSize: 14, color: 'var(--text)' }}>
-          Your agent now reads structure-preserving IR instead of raw files. Existing settings are merged, never overwritten.
+          Existing settings are merged, never overwritten. On Claude Code, large file reads are
+          replaced with structure automatically; run <code>composto stats</code> to see what that saved.
         </p>
       </section>
 
       <div className="ticks"></div>
 
-      {/* On top of compression: causal history as advisory context */}
-      <div style={{ textAlign: 'center', maxWidth: 720, margin: '64px auto 32px', padding: '0 24px' }}>
-        <p style={{ fontSize: 14, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>On top of the IR</p>
-        <h2 style={{ fontSize: 32, margin: 0, lineHeight: 1.25 }}>It also remembers what broke together.</h2>
-        <p style={{ fontSize: 16, color: 'var(--text)', marginTop: 12 }}>
-          Composto indexes your git history and surfaces what historically changed and broke alongside
-          the file you're editing, advisory context your agent weighs, not a gate. Same binary.
+      {/* Target Feature */}
+      <section id="target">
+        <h2>"But I need the exact code"</h2>
+        <p style={{ textAlign: 'center', marginBottom: 24, maxWidth: 640, margin: '0 auto 24px' }}>
+          Then read it. Structure is for finding code, source is for changing it. Composto's job is
+          to make sure you open the right file, and only the lines you need.
         </p>
-      </div>
-
-      {/* Stats */}
-      <section id="stats">
-        <div className="stat">
-          <div className="stat-value">89.5%</div>
-          <div className="stat-label">Avg Token Savings (52 files)</div>
-        </div>
-        <div className="stat">
-          <div className="stat-value">10x</div>
-          <div className="stat-label">More Code Fits in Context</div>
-        </div>
-        <div className="stat">
-          <div className="stat-value">99.1%</div>
-          <div className="stat-label">Best Case Compression</div>
-        </div>
-        <div className="stat">
-          <div className="stat-value">60.3%</div>
-          <div className="stat-label">Worst Case (still saves)</div>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-
-      {/* Real World Benchmarks */}
-      <section id="proof">
-        <h2 style={{ textAlign: 'center' }}>Tested on real projects</h2>
-        <p style={{ textAlign: 'center', marginBottom: 8 }}>Not our code. Popular open source projects you know.</p>
-        <div className="proof-table-wrapper">
-        <table className="proof-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Files</th>
-              <th>Raw Tokens</th>
-              <th>Savings</th>
-              <th>AST Engine</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Fastify</strong></td>
-              <td>31</td>
-              <td>47,539</td>
-              <td>88.0%</td>
-              <td>28/31</td>
-            </tr>
-            <tr>
-              <td><strong>Undici</strong></td>
-              <td>113</td>
-              <td>233,876</td>
-              <td>88.5%</td>
-              <td>105/113</td>
-            </tr>
-            <tr>
-              <td><strong>Node.js</strong></td>
-              <td>361</td>
-              <td>946,376</td>
-              <td>86.5%</td>
-              <td>338/361</td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
-          Run <code>composto benchmark .</code> on your own project. Takes 2 seconds.
-        </p>
-      </section>
-
-      <div className="ticks"></div>
-
-      {/* Cost Savings */}
-      <section id="savings">
-        <h2>Real cost savings</h2>
-        <p style={{ textAlign: 'center', marginBottom: 24 }}>
-          Benchmark: 52 files, 46,634 raw tokens per call. Saving 41,721 tokens each time.
-        </p>
-        <div className="savings-grid">
-          <div className="savings-card">
-            <h3>10 calls/day</h3>
-            <p className="savings-scenario">Same 52-file project, light usage</p>
-            <div className="savings-row">
-              <span>Claude Opus</span>
-              <span className="savings-amount">$188/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Sonnet</span>
-              <span className="savings-amount">$38/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Haiku</span>
-              <span className="savings-amount">$3.13/mo</span>
-            </div>
+        <div className="target-demo">
+          <div className="target-panel">
+            <h3>You ask:</h3>
+            <p className="target-quote">"Fix the bug in validateToken. It returns false for valid tokens."</p>
           </div>
-          <div className="savings-card featured">
-            <h3>50 calls/day</h3>
-            <p className="savings-scenario">Same 52-file project, active development</p>
-            <div className="savings-row">
-              <span>Claude Opus</span>
-              <span className="savings-amount">$939/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Sonnet</span>
-              <span className="savings-amount">$188/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Haiku</span>
-              <span className="savings-amount">$16/mo</span>
-            </div>
-          </div>
-          <div className="savings-card">
-            <h3>100 calls/day</h3>
-            <p className="savings-scenario">Same 52-file project, heavy usage</p>
-            <div className="savings-row">
-              <span>Claude Opus</span>
-              <span className="savings-amount">$1,877/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Sonnet</span>
-              <span className="savings-amount">$375/mo</span>
-            </div>
-            <div className="savings-row">
-              <span>Claude Haiku</span>
-              <span className="savings-amount">$31/mo</span>
-            </div>
+          <div className="target-panel">
+            <h3>Composto sends:</h3>
+            <CodeBlock language="bash" code={`composto context . --target validateToken
+
+# The file declaring it:  raw source
+# Files that import it:   detailed IR
+# Everything else:        structure only
+# Symbols carry Lstart-end, so the next
+# read is a line range, not a whole file`} />
           </div>
         </div>
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--text)' }}>
-          All numbers from real benchmark. Same project, same files. Only the call volume changes. Composto is free.
-        </p>
-      </section>
-
-      <div className="ticks"></div>
-
-      {/* Quality Proof */}
-      <section id="quality">
-        <h2>Does the LLM lose understanding?</h2>
-        <p style={{ textAlign: 'center', marginBottom: 24 }}>
-          We asked real questions about real projects using only the IR. Then verified against source code.
-        </p>
-        <div className="quality-grid">
-          <div className="quality-card">
-            <div className="quality-header">
-              <h3>Fastify reply.js</h3>
-              <span className="quality-badge">1,030 lines → 73 IR</span>
-            </div>
-            <p className="quality-question">"What does this file do and what are the main functions?"</p>
-            <p className="quality-answer">
-              Identified all 20 functions, correct flow order (Reply → hooks → onSendEnd → stream/trailer → serialize),
-              correct payload dispatch logic (null → stream → web stream → buffer → error).
-            </p>
-            <span className="quality-score">Verified: 100% accurate</span>
-          </div>
-          <div className="quality-card">
-            <div className="quality-header">
-              <h3>Node.js net.js</h3>
-              <span className="quality-badge">2,569 lines → 192 IR</span>
-            </div>
-            <p className="quality-question">"What public API does this module expose?"</p>
-            <p className="quality-answer">
-              Identified createServer, connect, Socket constructor, auto-select family API, all helpers.
-              Now captures runtime inheritance: EXTENDS:Socket &lt; stream.Duplex
-            </p>
-            <span className="quality-score">Verified: 100% accurate</span>
-          </div>
-          <div className="quality-card">
-            <div className="quality-header">
-              <h3>Fastify onSendEnd</h3>
-              <span className="quality-badge">105-line function</span>
-            </div>
-            <p className="quality-question">"In what order does it check the payload?"</p>
-            <p className="quality-answer">
-              Reconstructed all 8 conditions in exact order: trailers → Response → null → 1xx/204 → pipe → getReader → invalid type → finalize.
-            </p>
-            <span className="quality-score">Verified: 100% accurate</span>
-          </div>
-        </div>
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13 }}>
-          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/quality-proof.md" target="_blank">Full methodology and verification</a>
-        </p>
       </section>
 
       <div className="ticks"></div>
@@ -315,264 +323,53 @@ composto init --client=claude-code   # or cursor, gemini-cli`} />
 
       <div className="ticks"></div>
 
-      {/* Target Feature */}
-      <section id="target">
-        <h2>"But what about fixing bugs?"</h2>
-        <p style={{ textAlign: 'center', marginBottom: 24, maxWidth: 640, margin: '0 auto 24px' }}>
-          Fair question. IR is for understanding, not implementation. For bug fixes you need exact code.
-          That's what <code>--target</code> is for.
+      {/* Quality Proof */}
+      <section id="quality">
+        <h2>Does the agent lose understanding?</h2>
+        <p style={{ textAlign: 'center', marginBottom: 24 }}>
+          We asked real questions about real projects using only the structure, then verified every
+          answer against the source.
         </p>
-        <div className="target-demo">
-          <div className="target-panel">
-            <h3>You ask:</h3>
-            <p className="target-quote">"Fix the bug in validateToken. It's returning false for valid tokens."</p>
+        <div className="quality-grid">
+          <div className="quality-card">
+            <div className="quality-header">
+              <h3>Fastify reply.js</h3>
+              <span className="quality-badge">1,030 lines → 73 IR</span>
+            </div>
+            <p className="quality-question">"What does this file do and what are the main functions?"</p>
+            <p className="quality-answer">
+              Identified all 20 functions, correct flow order (Reply → hooks → onSendEnd → stream/trailer → serialize),
+              correct payload dispatch logic (null → stream → web stream → buffer → error).
+            </p>
+            <span className="quality-score">Verified against source</span>
           </div>
-          <div className="target-panel">
-            <h3>Composto sends:</h3>
-            <CodeBlock language="bash" code={`composto context . --target validateToken
-
-# Target file (contains validateToken): RAW CODE
-# Files that import/export it: L1 (compressed)
-# Hotspot files: L1 (compressed)
-# Everything else: L0 (structure only)
-
-# Result: your LLM sees the exact function code
-# PLUS surrounding context, all within budget`} />
+          <div className="quality-card">
+            <div className="quality-header">
+              <h3>Node.js net.js</h3>
+              <span className="quality-badge">2,569 lines → 192 IR</span>
+            </div>
+            <p className="quality-question">"What public API does this module expose?"</p>
+            <p className="quality-answer">
+              Identified createServer, connect, Socket constructor, auto-select family API, all helpers.
+              Captures runtime inheritance: EXTENDS:Socket &lt; stream.Duplex
+            </p>
+            <span className="quality-score">Verified against source</span>
+          </div>
+          <div className="quality-card">
+            <div className="quality-header">
+              <h3>Fastify onSendEnd</h3>
+              <span className="quality-badge">105-line function</span>
+            </div>
+            <p className="quality-question">"In what order does it check the payload?"</p>
+            <p className="quality-answer">
+              Reconstructed all 8 conditions in exact order: trailers → Response → null → 1xx/204 → pipe → getReader → invalid type → finalize.
+            </p>
+            <span className="quality-score">Verified against source</span>
           </div>
         </div>
-        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 14 }}>
-          Target file at L3, 10x more surrounding context at L1/L0. Same token budget.
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 13 }}>
+          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/quality-proof.md" target="_blank">Full methodology and verification</a>
         </p>
-      </section>
-
-      <div className="ticks"></div>
-
-      {/* Causal context, advisory layer on top of compression */}
-      <section id="blastradius">
-        <div style={{ textAlign: 'center', maxWidth: 760, margin: '0 auto', padding: '0 24px' }}>
-          <span className="badge" style={{ display: 'inline-block', marginBottom: 20 }}>Advisory layer</span>
-          <h2 style={{ margin: '0 0 20px', lineHeight: 1.15 }}>Causal context</h2>
-          <p style={{ margin: '0 auto 16px', fontSize: 19, lineHeight: 1.55, maxWidth: 680 }}>
-            IR tells your agent <em>what your code means</em>.{' '}
-            <strong>Composto also tells it what has historically changed and broken together.</strong>
-          </p>
-          <p style={{ margin: '0 auto', fontSize: 15, lineHeight: 1.7, color: 'var(--text)', maxWidth: 680 }}>
-            Before editing a file, the agent can see: has this region been reverted? Is there a fix cluster?
-            What files co-changed with it in past fixes? Context your LLM can't infer from current code,
-            surfaced as advisory signal the agent weighs, not a gate.
-          </p>
-        </div>
-        <div className="target-demo">
-          <div className="target-panel">
-            <h3>You ask:</h3>
-            <CodeBlock language="bash" code={`composto index                           # bootstrap the memory graph
-composto impact scripts/demo-video.ts   # query blast radius`} />
-          </div>
-          <div className="target-panel">
-            <h3>Composto answers:</h3>
-            <CodeBlock language="bash" code={`tazelik: fresh
-signals:
-  revert_match   ■■■■■■■■■■ touched by a Revert commit in history
-  cochange       ■■■■■      co-changed with session.ts, token.ts in past fixes
-  hotspot        ■          14 changes in the last 90 days
-
-# Advisory context: these files have a history of
-# breaking together. Your agent weighs it, you decide.`} />
-          </div>
-        </div>
-
-        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
-          <img
-            src="/banners/composto_hook_strategy_wide.svg"
-            alt="Hook strategy, agent Edit call flows through PreToolUse hook, Composto queries the local graph, verdict is injected back into agent context."
-            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
-          />
-        </div>
-
-        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
-          <img
-            src="/banners/composto_honest_eval.svg"
-            alt="Honest eval, time-travel backtest rewinds the DB to pre-fix HEAD so revert_match can't see the fix."
-            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
-          />
-        </div>
-
-        <div className="proof-table-wrapper" style={{ marginTop: 24 }}>
-          <table className="proof-table">
-            <thead>
-              <tr>
-                <th>Repo</th>
-                <th>Commits</th>
-                <th>Recall</th>
-                <th>What it means</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>express</strong></td>
-                <td>6,153</td>
-                <td>0.80</td>
-                <td>finds 80% of files a fix actually touched</td>
-              </tr>
-              <tr>
-                <td><strong>fastify</strong></td>
-                <td>4,744</td>
-                <td>0.67</td>
-                <td>recall grows with history depth</td>
-              </tr>
-              <tr>
-                <td><strong>composto</strong> <small>(young)</small></td>
-                <td>149</td>
-                <td>0.14</td>
-                <td>thin history → little signal yet</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p style={{ textAlign: 'center', marginTop: 12, fontSize: 13, color: 'var(--text)' }}>
-          Honest time-travel backtest: the DB is rewound to each pre-fix snapshot, so the signals
-          can't see the fix that came later. The causal layer is <strong>high-recall, advisory-grade</strong>,
-          on mature repos it recovers 67-80% of the files a fix touched. Precision is modest (~0.55), which is
-          why Composto surfaces these as <em>context the agent judges</em>, not a blocking verdict.
-          <br />
-          <small>
-            Recall scales with the repo's fix history, mature repos get strong recall, young repos get little
-            until history accumulates. The verdict returns <code>"unknown"</code> when confidence is low instead of guessing.
-          </small>
-        </p>
-
-        <div className="br-getstarted">
-          <h3 style={{ textAlign: 'center', marginTop: 40, marginBottom: 20 }}>Try it in 60 seconds</h3>
-          <div className="br-steps">
-            <div className="br-step">
-              <span className="br-step-num">1</span>
-              <div>
-                <h4>Install</h4>
-                <CodeBlock language="bash" code={`npm install -g composto-ai`} />
-              </div>
-            </div>
-            <div className="br-step">
-              <span className="br-step-num">2</span>
-              <div>
-                <h4>One-command setup</h4>
-                <CodeBlock language="bash" code={`cd your-project
-composto init --client=claude-code     # or cursor, or gemini-cli`} />
-                <p style={{ fontSize: 13, color: 'var(--text)', marginTop: 8 }}>
-                  Writes MCP config + a <code>PreToolUse</code> hook into your AI client's settings.
-                  On every Edit / Write, the agent gets the verdict automatically as in-context
-                  guidance. Passthrough on <code>low</code>, no noise.
-                </p>
-              </div>
-            </div>
-            <div className="br-step">
-              <span className="br-step-num">3</span>
-              <div>
-                <h4>Observe what happens</h4>
-                <CodeBlock language="bash" code={`composto stats            # hook invocations, verdict distribution, p50/p95 latency
-composto stats --disable  # local-only opt-out (nothing leaves your machine)
-
-# Or query on-demand, any time:
-composto impact src/auth/login.ts`} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="br-workflows">
-          <h3 style={{ textAlign: 'center', marginTop: 40, marginBottom: 12 }}>Where it fits</h3>
-          <div className="br-workflow-grid">
-            <div className="br-workflow">
-              <span className="br-workflow-tag">Hook-enforced (v0.6.0+)</span>
-              <p>
-                After <code>composto init --client=claude-code</code> (or <code>cursor</code>,{' '}
-                <code>gemini-cli</code>), every Edit / Write call goes through a <code>PreToolUse</code>{' '}
-                hook. Agent sees the verdict block inline, no "remember to call composto_blastradius."
-                p95 round-trip ≈100ms warm.
-              </p>
-            </div>
-            <div className="br-workflow">
-              <span className="br-workflow-tag">On your machine</span>
-              <p>
-                Run <code>composto impact</code> when you're about to touch a file you don't know well.
-                The verdict plus the evidence list (commit SHAs that broke things) points you at the
-                past incidents you'd miss by reading the current code.
-              </p>
-            </div>
-            <div className="br-workflow">
-              <span className="br-workflow-tag">In CI / pre-merge</span>
-              <p>
-                Pipe <code>git diff --name-only origin/main</code> into <code>composto impact</code>.
-                Flag PRs that touch medium|high-verdict files so a human gets a second look before
-                merging.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <p style={{ textAlign: 'center', marginTop: 32, fontSize: 13, color: 'var(--text)' }}>
-          <strong>When NOT to use it:</strong> fresh repos with less than ~50 commits, confidence stays low on purpose.
-          The tool honestly returns <code>unknown</code> rather than guess. Value grows with the repo's history.
-        </p>
-
-        <div style={{ maxWidth: 1100, width: '100%', margin: '48px auto 0' }}>
-          <img
-            src="/banners/composto_repo_local_privacy.svg"
-            alt="Repo-local privacy, the graph stays in your repo. No cloud, no telemetry, no account."
-            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 20 }}
-          />
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-
-      {/* Use Cases */}
-      <section id="use-cases">
-        <h2>How people use it</h2>
-        <p style={{ textAlign: 'center', marginBottom: 32 }}>Real workflows, real savings.</p>
-        <div className="use-case-grid">
-          <div className="use-case">
-            <span className="use-case-num">01</span>
-            <h3>"Explain this codebase"</h3>
-            <p className="use-case-desc">You have 200 files. Your LLM has a 200K token window. Raw code won't fit. With Composto:</p>
-            <CodeBlock language="bash" code={`# Pack 200 files into 4000 tokens
-composto context src/ --budget 4000
-
-# Result: 45 files at L1 (detailed)
-#         155 files at L0 (structure)
-#         Budget: 3,987/4,000 tokens`} />
-            <p className="use-case-result">Your LLM sees the entire codebase architecture in one prompt.</p>
-          </div>
-
-          <div className="use-case">
-            <span className="use-case-num">02</span>
-            <h3>"Review this PR"</h3>
-            <p className="use-case-desc">You changed 3 files but the reviewer needs context from 10 surrounding files:</p>
-            <CodeBlock language="bash" code={`# Changed files: full detail
-composto ir src/auth/login.ts L1
-
-# Context files: compressed
-composto ir src/auth/session.ts L1
-composto ir src/types.ts L0
-
-# 10 files of context in 800 tokens
-# instead of 8,000`} />
-            <p className="use-case-result">10x more context in the same token budget. Better reviews.</p>
-          </div>
-
-          <div className="use-case">
-            <span className="use-case-num">03</span>
-            <h3>"Is Composto worth it for my project?"</h3>
-            <p className="use-case-desc">Run the benchmark on your own codebase. Takes 2 seconds:</p>
-            <CodeBlock language="bash" code={`composto benchmark .
-
-# File                         Raw    L1   Saved
-# auth/login.ts                842   156   81.5%
-# utils/helpers.ts              480    72   85.0%
-# api/routes.ts               1203   198   83.5%
-# TOTAL                       2525   426   83.1%`} />
-            <p className="use-case-result">Instant proof. No API key needed. Pure local analysis.</p>
-          </div>
-        </div>
       </section>
 
       <div className="ticks"></div>
@@ -580,7 +377,11 @@ composto ir src/types.ts L0
       {/* How It Works */}
       <section id="how">
         <h2>How it works</h2>
-        <p>Tree-sitter parses your code into an AST. Every node gets classified.</p>
+        <p>
+          Tree-sitter parses your code into an AST and classifies every node, so what reaches the
+          agent is shape rather than punctuation. Compression is the mechanism; deciding what to
+          send is the product.
+        </p>
         <div className="tier-grid">
           <div className="tier-card">
             <span className="tier-tag keep">Tier 1: Keep</span>
@@ -617,37 +418,36 @@ composto ir src/types.ts L0
         <h2>Get started</h2>
         <div className="install-grid">
           <div className="install-option">
-            <h3>MCP Plugin</h3>
-            <p className="install-desc">For Claude Code, Cursor, Gemini CLI, and any MCP client. Hook-enforced causal memory on every edit.</p>
+            <h3>MCP server</h3>
+            <p className="install-desc">For Claude Code, Cursor, Gemini CLI, and any MCP client.</p>
             <CodeBlock language="bash" code={`# Install + register
 npm install -g composto-ai
 claude mcp add composto -- composto-mcp
 
-# Claude now has 5 tools:
-# composto_ir           compressed IR for any file
-# composto_benchmark    token savings report
-# composto_context      smart context packing
-# composto_scan         security scanner
-# composto_blastradius  historical blast radius (beta)`} />
+# Three tools, no more:
+# composto_context    ranked map of the repo,
+#                     target file as raw source
+# composto_ir         what one file contains,
+#                     symbols with line ranges
+# composto_benchmark  token-savings report`} />
           </div>
           <div className="install-option">
             <h3>CLI</h3>
             <p className="install-desc">Standalone command-line tool. Works with any project.</p>
-            <CodeBlock language="bash" code={`# Install globally
-npm install -g composto-ai
+            <CodeBlock language="bash" code={`npm install -g composto-ai
 
-# See how much you save
-composto benchmark .
+# Ranked map within a token budget
+composto context --budget 4000
 
-# Generate IR for any file
-composto ir src/app.ts
+# Locate a symbol, target file comes back raw
+composto context --target validateToken
 
-# Smart context within budget
-composto context src/ --budget 2000
+# What one file contains
+composto ir src/app.ts L1
 
-# Historical blast radius (beta)
-COMPOSTO_BLASTRADIUS=1 composto index
-composto impact src/auth/login.ts`} />
+# Keep a map on disk, refreshed on change
+composto reindex
+composto start`} />
           </div>
         </div>
       </section>
@@ -656,13 +456,12 @@ composto impact src/auth/login.ts`} />
 
       {/* Footer */}
       <section id="footer">
-        <span>Composto | less tokens, more insight</span>
+        <span>Composto | decides what your agent reads</span>
         <div className="footer-links">
           <Link to="/docs">Docs</Link>
           <a href="https://github.com/mertcanaltin/composto" target="_blank">GitHub</a>
           <a href="https://www.npmjs.com/package/composto-ai" target="_blank">npm</a>
-          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/benchmark-proof.md" target="_blank">Benchmark</a>
-          <a href="https://github.com/mertcanaltin/composto/blob/master/docs/blastradius-proof.md" target="_blank">BlastRadius proof</a>
+          <a href="https://github.com/mertcanaltin/composto/blob/master/scripts/discovery-eval.ts" target="_blank">Benchmark harness</a>
         </div>
       </section>
     </>
